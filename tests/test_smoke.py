@@ -14,7 +14,7 @@ DEMOS = sorted(ROOT.glob("papers/0[0-7]-*/demo.py")) + sorted(
     ROOT.glob("papers/annotated_gpt.py")
 )
 RESULT = re.compile(
-    r"^RESULT before=[0-9.]+ after=[0-9.]+ seconds=[0-9]+ device=\w+( \w+=\S+)*$"
+    r"^RESULT before=-?[0-9.]+ after=-?[0-9.]+ seconds=[0-9]+ device=\w+( \w+=\S+)*$"
 )
 
 
