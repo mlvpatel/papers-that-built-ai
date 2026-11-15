@@ -1,0 +1,17 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.coverage
+.pytest_cache/
+.ruff_cache/
+
+# Data downloaded on first run
+data/cifar-10-batches-py/
+data/*.tar.gz
+
+# Paper PDFs are for local reading only; pages link to the source instead
+pdfs/
+
+# macOS
+.DS_Store
