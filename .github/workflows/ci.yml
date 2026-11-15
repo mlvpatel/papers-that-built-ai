@@ -1,0 +1,25 @@
+name: ci
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install CPU-only PyTorch, then the rest
+        run: |
+          pip install torch==2.15.0 torchvision==0.29.2 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+          pip install pytest pytest-cov ruff
+      - name: Lint
+        run: ruff check . && ruff format --check .
+      - name: Smoke-run every Act 1 demo, with coverage
+        run: python -m pytest -q --cov=papers --cov-report=term-missing --cov-fail-under=80
