@@ -70,7 +70,7 @@ It trains on Tiny Shakespeare in 54 seconds on an Apple M5 Pro GPU, then writes 
 
 ## Run it
 
-You need Python 3.12. From a clone of this repo:
+You need Python 3.12. Act 1 runs from the repo alone, apart from CIFAR-10 for step 00 (about 170 MB); Act 2 downloads 9.6 GB of models on first use (details below). From a clone of this repo:
 
 ```bash
 python3.12 -m venv .venv
@@ -108,7 +108,7 @@ Step 04's Transformer is slightly worse after the same number of steps but train
 
 ### Act 2: small open models
 
-Act 2 downloads three models from Hugging Face on first use, each pinned to one revision so results repeat: Pythia-1.4B (2.9 GB, steps 08 and 09), Qwen2.5-1.5B-Instruct (3.1 GB, steps 09 to 11) and DeepSeek-R1-Distill-Qwen-1.5B (3.6 GB, step 11), 9.6 GB in all. Each model's weights take about 3 GB of memory and the demos load one model at a time, so a laptop with 16 GB of RAM should run them; they were measured on the 48 GB machine above. Act 2 has no `--quick` mode.
+Act 2 downloads three models from Hugging Face on first use, each pinned to one revision so results repeat: Pythia-1.4B (2.9 GB, steps 08 and 09), Qwen2.5-1.5B-Instruct (3.1 GB, steps 09 to 11) and DeepSeek-R1-Distill-Qwen-1.5B (3.6 GB, step 11), 9.6 GB in all. The demos load one model at a time; their measured peak memory is 3.9 to 5.9 GB, so a laptop with 16 GB of RAM should run them. They were measured on the 48 GB machine above. Act 2 has no `--quick` mode.
 
 | Step | Before → after | Full run, GPU |
 |---|---|---|
