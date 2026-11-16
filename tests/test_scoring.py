@@ -119,3 +119,27 @@ def test_sentence_check_allows_one_or_two_sentences():
 def test_every_instruction_has_a_check():
     assert len(inst.INSTRUCTIONS) == 3
     assert all(callable(check) for _, check in inst.INSTRUCTIONS)
+
+
+r1 = load("11-deepseek-r1")
+
+
+def test_r1_reads_the_boxed_answer():
+    assert r1.number(r"Wait, let me check. \boxed{97}") == 97
+    assert r1.number("no answer here") is None
+
+
+def test_r1_excerpt_shows_text_around_the_first_wait():
+    text = "a" * 500 + " Wait, that is wrong. " + "b" * 500
+    shown = r1.excerpt(text, width=40)
+    assert "Wait, that is wrong." in shown
+    assert len(shown) < 120
+
+
+def test_r1_excerpt_is_empty_when_the_model_never_waits():
+    assert r1.excerpt("straight to the answer") == ""
+
+
+def test_r1_problem_set_has_four_numeric_keys():
+    assert len(r1.PROBLEMS) == 4
+    assert [answer for _, answer in r1.PROBLEMS] == [38, 97, 927, 49]
