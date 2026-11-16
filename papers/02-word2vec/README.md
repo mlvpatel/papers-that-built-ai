@@ -25,7 +25,7 @@ python papers/02-word2vec/demo.py
 
 The demo trains 64-dimensional vectors on the dialogue of Tiny Shakespeare. The score is the average similarity of 16 related pairs (king/queen, day/night, father/son and others, fixed before the first run) minus the average similarity of 1,000 random pairs. Zero means the related pairs are no closer than chance.
 
-Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026:
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
 
 ```text
 194,240 words, 3,258 in the vocabulary, 449,010 training pairs, 16 related pairs scored
@@ -41,15 +41,15 @@ Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026:
         trained:   tender, 'hic, lute, livest, princess
  night  untrained: cousin, court, moving, spread, renowned
         trained:   dim, bed, torch, morrow, midnight
-RESULT before=-0.016 after=0.258 seconds=21 device=mps
+RESULT before=-0.016 after=0.258 seconds=12 device=mps
 ```
 
-Untrained, the related pairs score no better than random ones. After 21 seconds of training they score 0.258 higher. *Night* now sits next to dim, bed, torch, morrow and midnight, and *king* next to Henry and Warwick, names that fill the history plays in this text. *Love* is noisier: 200,000 words is a very small corpus next to the paper's billions.
+Untrained, the related pairs score no better than random ones. After 12 seconds of training they score 0.258 higher. *Night* now sits next to dim, bed, torch, morrow and midnight, and *king* next to Henry and Warwick, names that fill the history plays in this text. *Love* is noisier: 200,000 words is a very small corpus next to the paper's billions.
 
-On a CPU, use `--quick` (1,000 steps). It reaches the same score in 7 seconds, with slightly different neighbours (*night*: midnight, day, nights):
+On a CPU, use `--quick` (1,000 steps). It reaches the same score in 3 seconds, with slightly different neighbours (*night*: midnight, day, nights):
 
 ```text
-RESULT before=-0.016 after=0.259 seconds=7 device=cpu
+RESULT before=-0.016 after=0.259 seconds=3 device=cpu
 ```
 
 ## The paper's numbers

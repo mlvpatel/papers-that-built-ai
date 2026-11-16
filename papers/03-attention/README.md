@@ -26,34 +26,34 @@ python papers/03-attention/demo.py
 
 Two recurrent encoder-decoders, the same network from the same seed, learn to reverse random strings of 4 to 32 letters. Then each reverses 500 new strings at lengths 8, 16 and 32. The score is the share of output characters that are correct.
 
-Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026:
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
 
 ```text
   training without attention
     step    0  loss 2.307
-    step  500  loss 0.919
-    step 1000  loss 1.136
-    step 1500  loss 1.316
-    step 1999  loss 1.336
+    step  500  loss 0.932
+    step 1000  loss 1.135
+    step 1500  loss 1.261
+    step 1999  loss 1.360
   training with attention
     step    0  loss 2.305
-    step  500  loss 0.142
-    step 1000  loss 0.047
-    step 1500  loss 0.115
-    step 1999  loss 0.176
+    step  500  loss 0.160
+    step 1000  loss 0.104
+    step 1500  loss 0.059
+    step 1999  loss 0.197
 length | without attention | with attention   (characters correct)
-     8 |             99.4% |          99.4%
-    16 |             58.3% |          99.0%
-    32 |             24.5% |          96.7%
-RESULT before=24.5 after=96.7 seconds=94 device=mps
+     8 |             99.4% |          99.9%
+    16 |             58.4% |          98.7%
+    32 |             26.0% |          94.2%
+RESULT before=26.0 after=94.2 seconds=63 device=mps
 ```
 
-Both models reverse 8-letter strings almost perfectly. Without attention, accuracy falls to 58.3% at 16 letters and 24.5% at 32, close to the 10% of random guessing. With attention it stays at 96.7%. (The loss lines are single batches of random length, so they jump around.)
+Both models reverse 8-letter strings almost perfectly. Without attention, accuracy falls to 58.4% at 16 letters and 26.0% at 32, close to the 10% of random guessing. With attention it stays at 94.2%. GPU runs vary a little from run to run: an earlier run on 15 November gave 24.5% and 96.7% at length 32. (The loss lines are single batches of random length, so they jump around.)
 
 On a CPU, use `--quick` (400 steps each). The same pattern, less trained:
 
 ```text
-RESULT before=23.4 after=65.3 seconds=25 device=cpu
+RESULT before=23.4 after=65.3 seconds=17 device=cpu
 ```
 
 The first full run of this demo had no gradient clipping. The attention model's loss fell to 0.199, climbed back to 1.989 by step 2,000, and it finished at 24.2% at length 32, no better than the model without attention. The paper caps the size (norm) of each gradient at 1 (pages 14 and 15), and the demo now does the same; the results above are from that version.

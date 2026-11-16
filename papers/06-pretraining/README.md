@@ -25,7 +25,7 @@ python papers/06-pretraining/demo.py
 
 The test: given a line of Shakespeare and the same words in shuffled order, which one is real? Lines are lowercased with punctuation removed, so word order is the only clue. Each model picks the order it finds more likely, meaning the lower next-character loss. Model A learns from the 300 task lines only. Model B, the same network from the same seed with the same 3,000 steps, learns from the whole text with every test line cut out. Chance is 50%.
 
-Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026:
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
 
 ```text
 500 test pairs; chance is 50%
@@ -34,15 +34,15 @@ Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026:
 A reads 12,607 characters; B reads 1,048,128
   A  step    0  loss 3.516
   A  step 1000  loss 0.184
-  A  step 2000  loss 0.159
-  A  step 2999  loss 0.138
+  A  step 2000  loss 0.154
+  A  step 2999  loss 0.136
 A, the 300 task lines only:  picks the real line 59.8%
   B  step    0  loss 3.518
   B  step 1000  loss 1.507
   B  step 2000  loss 1.373
   B  step 2999  loss 1.325
 B, pre-trained on the text:  picks the real line 91.4%
-RESULT before=59.8 after=91.4 seconds=155 device=mps
+RESULT before=59.8 after=91.4 seconds=84 device=mps
 ```
 
 Model A learned its 300 lines almost by heart (training loss 0.14) and still picks the real line only 59.8% of the time. Model B never saw a test line and picks it 91.4% of the time.
@@ -50,7 +50,7 @@ Model A learned its 300 lines almost by heart (training loss 0.14) and still pic
 On a CPU, use `--quick` (600 steps per model). The gap is smaller with less pre-training:
 
 ```text
-RESULT before=63.8 after=72.6 seconds=70 device=cpu
+RESULT before=63.8 after=72.6 seconds=41 device=cpu
 ```
 
 ### What was tried first

@@ -28,26 +28,26 @@ python papers/04-transformer/demo.py
 
 Two character models of about the same size, trained on Tiny Shakespeare with the same text, seed and 1,500 steps (each model draws its own random batches from it): a GRU (a recurrent network) and a 2-block Transformer. Lower validation loss is better.
 
-Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026:
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
 
 ```text
   GRU         step    0  loss 4.188
   GRU         step  500  loss 1.622
   GRU         step 1000  loss 1.459
-GRU         428,097 parameters, val loss 1.605, trained in 40 s
+GRU         428,097 parameters, val loss 1.605, trained in 29 s
   Transformer step    0  loss 4.341
   Transformer step  500  loss 1.851
   Transformer step 1000  loss 1.685
-Transformer 421,697 parameters, val loss 1.724, trained in 17 s
-RESULT before=1.61 after=1.72 seconds=59 device=mps gru_seconds=40 transformer_seconds=17
+Transformer 421,697 parameters, val loss 1.724, trained in 12 s
+RESULT before=1.61 after=1.72 seconds=42 device=mps gru_seconds=29 transformer_seconds=12
 ```
 
-The two results point in different directions, and both are real. Step for step, the GRU learns slightly better here: 1.61 against 1.72. Each Transformer step is 2.4 times faster, 17 seconds against 40 for the same 1,500 steps. That speed is the paper's argument. At its scale the Transformer won on quality too, but at this scale, with 64-character contexts and 0.4 million parameters, the recurrent model still holds its own per step.
+The two results point in different directions, and both are real. Step for step, the GRU learns slightly better here: 1.61 against 1.72. Each Transformer step is 2.4 times faster, 12 seconds against 29 for the same 1,500 steps. That speed is the paper's argument. At its scale the Transformer won on quality too, but at this scale, with 64-character contexts and 0.4 million parameters, the recurrent model still holds its own per step.
 
 On a CPU, use `--quick` (300 steps each). The same pattern, with a smaller speed gap:
 
 ```text
-RESULT before=1.85 after=2.12 seconds=19 device=cpu gru_seconds=10 transformer_seconds=7
+RESULT before=1.85 after=2.12 seconds=13 device=cpu gru_seconds=8 transformer_seconds=5
 ```
 
 ## The paper's numbers

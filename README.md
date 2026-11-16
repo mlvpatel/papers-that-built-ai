@@ -90,21 +90,21 @@ python papers/05-resnet/demo.py
 
 Each demo picks a GPU when it finds one (Apple `mps` or `cuda`) and falls back to the CPU. On a CPU, add `--quick` for a shorter run. Steps 01 to 07 work offline, since Tiny Shakespeare is in the repo; step 00 downloads CIFAR-10 (about 170 MB) on its first run.
 
-Measured on an Apple M5 Pro (48 GB), 15 and 16 November 2026. Each page shows the full output.
+Measured on an Apple M5 Pro (48 GB), 16 November 2026. Each page shows the full output.
 
 | Step | Before → after | Full run, GPU | `--quick`, CPU |
 |---|---|---|---|
-| [00 AlexNet](papers/00-alexnet/) | Test accuracy 52.2% → 74.4% | 50 s | 101 s |
+| [00 AlexNet](papers/00-alexnet/) | Test accuracy 52.2% → 74.4% | 40 s | 76 s |
 | [01 Backprop](papers/01-backprop/) | XOR solved 50% → 100% | 1 s (CPU) | same run |
-| [02 Word2Vec](papers/02-word2vec/) | Pair score -0.016 → 0.258 | 21 s | 7 s |
-| [03 Attention](papers/03-attention/) | Characters right at length 32: 24.5% → 96.7% | 94 s | 25 s |
-| [04 Transformer](papers/04-transformer/) | Loss 1.61 → 1.72, training 40 s → 17 s | 59 s | 19 s |
-| [05 ResNet](papers/05-resnet/) | Loss of a 24-block model 3.36 → 1.67 | 214 s | 149 s |
-| [06 Pre-training](papers/06-pretraining/) | Picks the real line 59.8% → 91.4% | 155 s | 70 s |
-| [07 Scaling](papers/07-scaling/) | Loss 2.21 → 1.66 as size grows | 173 s | 71 s |
-| [annotated_gpt.py](papers/annotated_gpt.py) | Held-out loss 4.195 → 1.814 | 54 s | 39 s |
+| [02 Word2Vec](papers/02-word2vec/) | Pair score -0.016 → 0.258 | 12 s | 3 s |
+| [03 Attention](papers/03-attention/) | Characters right at length 32: 26.0% → 94.2% | 63 s | 17 s |
+| [04 Transformer](papers/04-transformer/) | Loss 1.61 → 1.72, training 29 s → 12 s | 42 s | 13 s |
+| [05 ResNet](papers/05-resnet/) | Loss of a 24-block model 3.36 → 1.67 | 151 s | 106 s |
+| [06 Pre-training](papers/06-pretraining/) | Picks the real line 59.8% → 91.4% | 84 s | 41 s |
+| [07 Scaling](papers/07-scaling/) | Loss 2.21 → 1.66 as size grows | 106 s | 49 s |
+| [annotated_gpt.py](papers/annotated_gpt.py) | Held-out loss 4.195 → 1.794 | 54 s | 35 s |
 
-Step 04's Transformer is slightly worse after the same number of steps but trains more than twice as fast; the page explains why that speed was the paper's argument.
+Step 04's Transformer is slightly worse after the same number of steps but trains more than twice as fast; the page explains why that speed was the paper's argument. GPU runs are not bit-for-bit repeatable, so steps 03 and annotated_gpt.py land a little differently each time: an earlier run gave 24.5% → 96.7% and 1.814.
 
 ## License
 

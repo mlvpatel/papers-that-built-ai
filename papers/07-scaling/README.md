@@ -27,7 +27,7 @@ python papers/07-scaling/demo.py
 
 The demo trains five widths of the step 06 model on Tiny Shakespeare. First every size gets the same 1,000 steps (Kaplan). Then every size gets the same compute, equal to the 64-wide model's 1,000 steps, so the small models train longer and the big ones shorter (Chinchilla). Lower validation loss is better.
 
-Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026:
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
 
 ```text
 width    params | same steps: steps   loss | same compute: steps   loss
@@ -36,7 +36,7 @@ width    params | same steps: steps   loss | same compute: steps   loss
    96   447,360 |              1000  1.798 |                 447  2.037
   128   793,088 |              1000  1.746 |                 252  2.117
   192 1,779,456 |              1000  1.665 |                 112  2.301
-RESULT before=2.21 after=1.66 seconds=173 device=mps best_size_at_fixed_compute=199936
+RESULT before=2.21 after=1.66 seconds=106 device=mps best_size_at_fixed_compute=199936
 ```
 
 ![Validation loss against model size: falling with the same steps, a valley with the same compute](scaling.png)
@@ -46,7 +46,7 @@ With the same steps, every bigger model is better. With the same compute, the be
 On a CPU, use `--quick` (250 steps per size). With a budget that small the smallest model comes out best, so only the large side of the valley shows:
 
 ```text
-RESULT before=2.54 after=2.02 seconds=71 device=cpu best_size_at_fixed_compute=50816
+RESULT before=2.54 after=2.02 seconds=49 device=cpu best_size_at_fixed_compute=50816
 ```
 
 ## The paper's numbers

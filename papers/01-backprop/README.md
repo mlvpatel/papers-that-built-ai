@@ -26,7 +26,7 @@ python papers/01-backprop/demo.py
 
 Model A has no hidden layer. Model B has a hidden layer of four units. Both start from the same seed and train for 2,000 steps on the four XOR points. The table shows each model's output for each input; above 0.5 counts as 1.
 
-Measured on an Apple M5 Pro (48 GB), CPU, 15 November 2026:
+Measured on an Apple M5 Pro (48 GB), CPU, 16 November 2026:
 
 ```text
 input  target | A: no hidden layer | B: hidden layer

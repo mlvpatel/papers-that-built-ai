@@ -29,47 +29,47 @@ python papers/00-alexnet/demo.py
 
 The first run downloads CIFAR-10 (about 170 MB) into `data/`, which git ignores. Both models learn the 50,000 training photos for 10 epochs, with Adam, a batch of 128 (the paper's batch size, page 6), the same seed and the same batch order. Model A flattens each photo into 3,072 numbers and passes them through two fully connected layers of 512 units. Model B is the small CNN: three convolution stages, then one fully connected layer of 256 units. Accuracy is measured once, after the last epoch, on the 10,000 test photos. Guessing scores 10%.
 
-Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026, after the download:
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026, after the download:
 
 ```text
 50,000 training photos, 10,000 test photos
 10 classes, so guessing scores 10%
 A fully connected: 1,841,162 parameters
-  A  epoch  1  train loss 1.639  1.1 s
-  A  epoch  2  train loss 1.430  1.0 s
+  A  epoch  1  train loss 1.639  1.2 s
+  A  epoch  2  train loss 1.430  0.9 s
   A  epoch  3  train loss 1.316  1.0 s
   A  epoch  4  train loss 1.223  1.0 s
-  A  epoch  5  train loss 1.144  1.3 s
+  A  epoch  5  train loss 1.144  0.9 s
   A  epoch  6  train loss 1.062  1.0 s
-  A  epoch  7  train loss 0.991  1.5 s
+  A  epoch  7  train loss 0.991  1.0 s
   A  epoch  8  train loss 0.917  0.9 s
-  A  epoch  9  train loss 0.838  1.0 s
-  A  epoch 10  train loss 0.774  1.0 s
+  A  epoch  9  train loss 0.838  0.9 s
+  A  epoch 10  train loss 0.774  0.9 s
 A fully connected: test accuracy 52.2%
 B small CNN: 620,362 parameters
-  B  epoch  1  train loss 1.388  2.7 s
-  B  epoch  2  train loss 0.957  3.1 s
-  B  epoch  3  train loss 0.788  3.0 s
-  B  epoch  4  train loss 0.661  3.0 s
-  B  epoch  5  train loss 0.560  3.0 s
-  B  epoch  6  train loss 0.480  3.0 s
-  B  epoch  7  train loss 0.389  3.0 s
-  B  epoch  8  train loss 0.316  3.0 s
-  B  epoch  9  train loss 0.248  3.0 s
-  B  epoch 10  train loss 0.196  3.0 s
+  B  epoch  1  train loss 1.388  2.5 s
+  B  epoch  2  train loss 0.957  2.3 s
+  B  epoch  3  train loss 0.788  2.5 s
+  B  epoch  4  train loss 0.661  2.3 s
+  B  epoch  5  train loss 0.560  2.5 s
+  B  epoch  6  train loss 0.480  2.3 s
+  B  epoch  7  train loss 0.389  2.2 s
+  B  epoch  8  train loss 0.316  2.3 s
+  B  epoch  9  train loss 0.248  2.5 s
+  B  epoch 10  train loss 0.196  2.1 s
 B small CNN: test accuracy 74.4%
-100 CNN training batches: CPU 6.0 s, GPU 0.6 s
-RESULT before=52.2 after=74.4 seconds=50 device=mps cpu_s=6.0 gpu_s=0.6
+100 CNN training batches: CPU 4.2 s, GPU 0.6 s
+RESULT before=52.2 after=74.4 seconds=40 device=mps cpu_s=4.2 gpu_s=0.6
 ```
 
 The CNN has a third of the parameters and gets 74.4% of the test photos right, against 52.2% for the fully connected model. The demo leaves out data augmentation and dropout, the two defences against overfitting AlexNet relied on (sections 4.1 and 4.2).
 
-The line before RESULT is the other half of AlexNet's story: the same 100 training batches of the CNN take ten times as long on this laptop's CPU as on its GPU.
+The line before RESULT is the other half of AlexNet's story: the same 100 training batches of the CNN take seven times as long on this laptop's CPU as on its GPU.
 
 On a CPU, use `--quick` (4 epochs per model). Same machine, CPU only:
 
 ```text
-RESULT before=52.0 after=73.6 seconds=101 device=cpu
+RESULT before=52.0 after=73.6 seconds=76 device=cpu
 ```
 
 ## The paper's numbers

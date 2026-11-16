@@ -27,15 +27,15 @@ python papers/05-resnet/demo.py
 
 The demo trains the same character-level Transformer on Tiny Shakespeare three times, from the same seed: 2 blocks without skip connections, 24 blocks without them, and 24 blocks with them. Lower validation loss is better; random guessing scores 4.17.
 
-Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026, 1,000 steps per run:
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026, 1,000 steps per run:
 
 ```text
 1,115,394 characters, 65 distinct; random guessing scores 4.17
 shallow  2 blocks, skip=False  step    0  val loss 4.342
-shallow  2 blocks, skip=False  step  250  val loss 2.579
-shallow  2 blocks, skip=False  step  500  val loss 2.227
+shallow  2 blocks, skip=False  step  250  val loss 2.573
+shallow  2 blocks, skip=False  step  500  val loss 2.230
 shallow  2 blocks, skip=False  step  750  val loss 2.021
-shallow  2 blocks, skip=False  final      val loss 1.870
+shallow  2 blocks, skip=False  final      val loss 1.874
 before  24 blocks, skip=False  step    0  val loss 4.307
 before  24 blocks, skip=False  step  250  val loss 3.353
 before  24 blocks, skip=False  step  500  val loss 3.333
@@ -46,7 +46,7 @@ after   24 blocks, skip=True   step  250  val loss 2.082
 after   24 blocks, skip=True   step  500  val loss 1.840
 after   24 blocks, skip=True   step  750  val loss 1.719
 after   24 blocks, skip=True   final      val loss 1.671
-RESULT before=3.36 after=1.67 seconds=214 device=mps shallow=1.87
+RESULT before=3.36 after=1.67 seconds=151 device=mps shallow=1.87
 ```
 
 Without skip connections, the 24-block model is stuck at about 3.35 from step 250 on, while the 2-block model keeps improving. With them, the 24-block model beats the 2-block one: depth helps again once it can be trained.
@@ -54,7 +54,7 @@ Without skip connections, the 24-block model is stuck at about 3.35 from step 25
 On a CPU, use `--quick` (250 steps per run). Same machine, CPU only:
 
 ```text
-RESULT before=3.35 after=2.08 seconds=149 device=cpu shallow=2.58
+RESULT before=3.35 after=2.08 seconds=106 device=cpu shallow=2.58
 ```
 
 ## The paper's numbers
