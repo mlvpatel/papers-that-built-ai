@@ -169,7 +169,9 @@ Each paper's core equation, in the paper's own notation where it has one, with t
 
 A convolutional layer computes each output from a small window of the input, with the same weights $`W`$ at every position $`(i, j)`$, then applies the ReLU $`f(x) = \max(0, x)`$ (section 3.1):
 
-$$y_{i,j,k} = \max\Big(0,\; b_k + \sum_{c}\sum_{u,v} W_{k,c,u,v}\; x_{i+u,\,j+v,\,c}\Big)$$
+```math
+y_{i,j,k} = \max\Big(0,\; b_k + \sum_{c}\sum_{u,v} W_{k,c,u,v}\; x_{i+u,\,j+v,\,c}\Big)
+```
 
 The logic is in the two assumptions the paper names on page 1: nearby pixels depend on each other most (so the window is small), and a pattern means the same thing wherever it appears (so the weights are shared). A 3 by 3 filter bank from $`C_{in}`$ to $`C_{out}`$ channels has $`9\,C_{in} C_{out}`$ weights whatever the image size, while a fully connected layer between two feature maps needs one weight per pair of positions. Fewer parameters is why it trains, and GPUs are why it trains fast: five to six days on two GTX 580s (page 7).
 
@@ -180,15 +182,21 @@ The logic is in the two assumptions the paper names on page 1: nearby pixels dep
 
 Measure the error at the output, here the squared difference between the output $`y`$ and the target $`d`$, summed over output units $`j`$ and cases $`c`$:
 
-$$E = \tfrac{1}{2}\sum_{c}\sum_{j}\big(y_{j,c} - d_{j,c}\big)^2$$
+```math
+E = \tfrac{1}{2}\sum_{c}\sum_{j}\big(y_{j,c} - d_{j,c}\big)^2
+```
 
 For a unit with total input $`z_j`$ and activation $`f`$, its error signal $`\delta_j = \partial E / \partial z_j`$ comes from the output for the last layer, and from the layer above for every hidden layer:
 
-$$\delta_j^{\text{output}} = (y_j - d_j)\, f'(z_j) \qquad\qquad \delta_j^{\text{hidden}} = f'(z_j)\sum_k w_{jk}\,\delta_k$$
+```math
+\delta_j^{\text{output}} = (y_j - d_j)\, f'(z_j) \qquad\qquad \delta_j^{\text{hidden}} = f'(z_j)\sum_k w_{jk}\,\delta_k
+```
 
 Every weight then moves downhill by a step $`\varepsilon`$:
 
-$$\Delta w_{ij} = -\varepsilon\,\frac{\partial E}{\partial w_{ij}} = -\varepsilon\,\delta_j\, y_i$$
+```math
+\Delta w_{ij} = -\varepsilon\,\frac{\partial E}{\partial w_{ij}} = -\varepsilon\,\delta_j\, y_i
+```
 
 The logic: each layer's $`\delta`$ is reused to compute the layer below, so one backward pass costs about as much as one forward pass, however deep the network. Hidden units now get a training signal of their own, which is what lets them invent features (abstract). Written here in modern notation.
 
@@ -199,15 +207,21 @@ The logic: each layer's $`\delta`$ is reused to compute the layer below, so one 
 
 Skip-gram maximises the average log probability of each word's neighbours within a window of size $`c`$, with a softmax over the whole vocabulary of $`W`$ words. The objective is written out in the authors' follow-up paper ([Mikolov et al. 2013b](https://arxiv.org/abs/1310.4546), Equations 1 and 2):
 
-$$\frac{1}{T}\sum_{t=1}^{T}\;\sum_{-c\le j\le c,\; j\ne 0}\log p(w_{t+j}\mid w_t), \qquad p(w_O\mid w_I) = \frac{\exp\big({v'_{w_O}}^{\top} v_{w_I}\big)}{\sum_{w=1}^{W}\exp\big({v'_{w}}^{\top} v_{w_I}\big)}$$
+```math
+\frac{1}{T}\sum_{t=1}^{T}\;\sum_{-c\le j\le c,\; j\ne 0}\log p(w_{t+j}\mid w_t), \qquad p(w_O\mid w_I) = \frac{\exp\big({v'_{w_O}}^{\top} v_{w_I}\big)}{\sum_{w=1}^{W}\exp\big({v'_{w}}^{\top} v_{w_I}\big)}
+```
 
 The denominator touches every word in the vocabulary. Negative sampling, which the demo uses, replaces it with $`k`$ random words drawn from a noise distribution $`P_n`$ (same paper, Equation 4):
 
-$$\log\sigma\big({v'_{w_O}}^{\top} v_{w_I}\big) + \sum_{i=1}^{k}\mathbb{E}_{w_i\sim P_n(w)}\Big[\log\sigma\big(-{v'_{w_i}}^{\top} v_{w_I}\big)\Big]$$
+```math
+\log\sigma\big({v'_{w_O}}^{\top} v_{w_I}\big) + \sum_{i=1}^{k}\mathbb{E}_{w_i\sim P_n(w)}\Big[\log\sigma\big(-{v'_{w_i}}^{\top} v_{w_I}\big)\Big]
+```
 
 The logic: words used in the same contexts get pushed towards the same output vectors, so their input vectors end up close. Analogies then become vector arithmetic, answered by the nearest word by cosine distance (page 2):
 
-$$\arg\max_{x}\;\cos\big(v_x,\; v_{\text{king}} - v_{\text{man}} + v_{\text{woman}}\big) = \text{queen}$$
+```math
+\arg\max_{x}\;\cos\big(v_x,\; v_{\text{king}} - v_{\text{man}} + v_{\text{woman}}\big) = \text{queen}
+```
 
 </details>
 
@@ -216,7 +230,9 @@ $$\arg\max_{x}\;\cos\big(v_x,\; v_{\text{king}} - v_{\text{man}} + v_{\text{woma
 
 The encoder keeps one annotation $`h_j`$ per input word. Before writing output word $`i`$, the decoder in state $`s_{i-1}`$ scores every annotation, turns the scores into weights and reads their weighted sum (Equations 5 and 6; the alignment model is in Appendix A.1.2):
 
-$$e_{ij} = v_a^{\top}\tanh\big(W_a s_{i-1} + U_a h_j\big), \qquad \alpha_{ij} = \frac{\exp(e_{ij})}{\sum_{k=1}^{T_x}\exp(e_{ik})}, \qquad c_i = \sum_{j=1}^{T_x}\alpha_{ij}\, h_j$$
+```math
+e_{ij} = v_a^{\top}\tanh\big(W_a s_{i-1} + U_a h_j\big), \qquad \alpha_{ij} = \frac{\exp(e_{ij})}{\sum_{k=1}^{T_x}\exp(e_{ik})}, \qquad c_i = \sum_{j=1}^{T_x}\alpha_{ij}\, h_j
+```
 
 The logic: the weights $`\alpha_{ij}`$ sum to 1, so $`c_i`$ is the expected annotation under a soft alignment, and because it is differentiable the alignment is learned with everything else (page 4). Fix $`c_i`$ to the encoder's final state and the model turns back into the plain encoder-decoder (page 14), which is exactly the demo's model without attention. The price is $`T_x \times T_y`$ scores per sentence pair (page 12).
 
@@ -227,11 +243,15 @@ The logic: the weights $`\alpha_{ij}`$ sum to 1, so $`c_i`$ is the expected anno
 
 Pack the queries, keys and values into matrices and compute all positions at once (Equation 1, page 4):
 
-$$\mathrm{Attention}(Q, K, V) = \mathrm{softmax}\Big(\frac{QK^{\top}}{\sqrt{d_k}}\Big)V$$
+```math
+\mathrm{Attention}(Q, K, V) = \mathrm{softmax}\Big(\frac{QK^{\top}}{\sqrt{d_k}}\Big)V
+```
 
 Run $`h`$ of these side by side on learned projections and join them (page 5):
 
-$$\mathrm{MultiHead}(Q,K,V) = \mathrm{Concat}(\mathrm{head}_1,\ldots,\mathrm{head}_h)\,W^O, \qquad \mathrm{head}_i = \mathrm{Attention}\big(QW_i^Q,\; KW_i^K,\; VW_i^V\big)$$
+```math
+\mathrm{MultiHead}(Q,K,V) = \mathrm{Concat}(\mathrm{head}_1,\ldots,\mathrm{head}_h)\,W^O, \qquad \mathrm{head}_i = \mathrm{Attention}\big(QW_i^Q,\; KW_i^K,\; VW_i^V\big)
+```
 
 Why divide by $`\sqrt{d_k}`$: if the components of $`q`$ and $`k`$ are independent with mean 0 and variance 1, their dot product has variance $`d_k`$, which pushes the softmax into regions with tiny gradients (footnote 4, page 4). In a language model, future positions are set to $`-\infty`$ before the softmax so a token cannot see what comes after it (page 5).
 
@@ -249,11 +269,15 @@ The paper's case against recurrence is Table 1 (page 6), for sequence length $`n
 
 If a few layers should compute $`H(x)`$, let them learn the residual $`\mathcal{F}(x) = H(x) - x`$ instead and add the input back through a shortcut (Equation 1, page 3):
 
-$$y = \mathcal{F}\big(x, \lbrace W_i\rbrace\big) + x$$
+```math
+y = \mathcal{F}\big(x, \lbrace W_i\rbrace\big) + x
+```
 
 The logic: a deeper network should never be worse than a shallower one, since the extra layers could copy their input, but plain networks fail to learn that copy (page 1). With a shortcut, copying only needs $`\mathcal{F} \to 0`$, and the shortcut adds no parameters (page 2). Differentiating the block shows why the signal survives depth:
 
-$$\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y}\Big(1 + \frac{\partial \mathcal{F}}{\partial x}\Big)$$
+```math
+\frac{\partial L}{\partial x} = \frac{\partial L}{\partial y}\Big(1 + \frac{\partial \mathcal{F}}{\partial x}\Big)
+```
 
 The $`1`$ carries the gradient straight through every block, whatever the layers inside do.
 
@@ -264,15 +288,21 @@ The $`1`$ carries the gradient straight through every block, whatever the layers
 
 GPT-1 first maximises the likelihood of each token given the $`k`$ before it, over an unlabeled corpus $`\mathcal{U}`$ (Equation 1, page 3):
 
-$$L_1(\mathcal{U}) = \sum_i \log P\big(u_i \mid u_{i-k},\ldots,u_{i-1};\,\Theta\big)$$
+```math
+L_1(\mathcal{U}) = \sum_i \log P\big(u_i \mid u_{i-k},\ldots,u_{i-1};\,\Theta\big)
+```
 
 Then it fine-tunes on a labeled set $`\mathcal{C}`$, keeping language modelling as an auxiliary loss with weight $`\lambda`$ (Equations 4 and 5, page 3):
 
-$$L_2(\mathcal{C}) = \sum_{(x,y)}\log P\big(y \mid x^1,\ldots,x^m\big), \qquad L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda\, L_1(\mathcal{C})$$
+```math
+L_2(\mathcal{C}) = \sum_{(x,y)}\log P\big(y \mid x^1,\ldots,x^m\big), \qquad L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda\, L_1(\mathcal{C})
+```
 
 BERT changes only the pre-training task. It hides a random 15% of the tokens, the set $`M`$, and predicts them from both sides (page 4):
 
-$$\mathcal{L}_{\text{MLM}} = -\sum_{i\in M}\log P\big(x_i \mid x_{\setminus M}\big)$$
+```math
+\mathcal{L}_{\text{MLM}} = -\sum_{i\in M}\log P\big(x_i \mid x_{\setminus M}\big)
+```
 
 The logic: predicting text forces the model to learn grammar, facts and meaning, and none of it needs labels. The task then only has to adapt a model that already knows the language, which is why GPT-1 scored 74.7 with pre-training and 59.9 without (Table 5, page 8).
 
@@ -283,17 +313,23 @@ The logic: predicting text forces the model to learn grammar, facts and meaning,
 
 Kaplan et al. fit test loss against $`N`$, the parameters without embeddings, as a power law (Equation 1.1, page 4), and count training compute as about $`6N`$ operations per token, $`2N`$ forward and $`4N`$ backward (page 7):
 
-$$L(N) = \Big(\frac{N_c}{N}\Big)^{\alpha_N}, \quad \alpha_N \approx 0.076 \qquad\qquad C \approx 6ND$$
+```math
+L(N) = \Big(\frac{N_c}{N}\Big)^{\alpha_N}, \quad \alpha_N \approx 0.076 \qquad\qquad C \approx 6ND
+```
 
 Doubling $`N`$ multiplies the loss by $`2^{-\alpha_N} \approx 0.95`$ (page 5). Their best model size grew as $`N \propto C^{0.73}`$ (page 5), so most of a bigger budget went into parameters.
 
 Chinchilla models the loss as a function of both parameters and training tokens $`D`$ (Equation 2, page 6):
 
-$$\hat{L}(N, D) = E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}}$$
+```math
+\hat{L}(N, D) = E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}}
+```
 
 $`E`$ is the entropy of natural text, the second term is the cost of a finite model and the third the cost of finite training (page 6). Minimising $`\hat{L}`$ under $`6ND = C`$ gives (Equation 4, page 7):
 
-$$N_{opt} \propto C^{a}, \quad D_{opt} \propto C^{b}, \qquad a = \frac{\beta}{\alpha + \beta}, \quad b = \frac{\alpha}{\alpha + \beta}$$
+```math
+N_{opt} \propto C^{a}, \quad D_{opt} \propto C^{b}, \qquad a = \frac{\beta}{\alpha + \beta}, \quad b = \frac{\alpha}{\alpha + \beta}
+```
 
 The logic: $`a + b = 1`$, so when $`\alpha`$ and $`\beta`$ are close, model size and data each grow as about $`\sqrt{C}`$. Chinchilla's three methods put $`a`$ at 0.46 to 0.50, against Kaplan's 0.73 (Table 2, page 8).
 
@@ -304,7 +340,9 @@ The logic: $`a + b = 1`$, so when $`\alpha`$ and $`\beta`$ are close, model size
 
 GPT-3 is a next-token predictor. In-context learning puts a task description and $`k`$ solved examples in front of a new input $`x`$ and reads off the most likely completion, with the weights $`\theta`$ frozen:
 
-$$\hat{y} = \arg\max_{y}\; P_{\theta}\big(y \mid \text{description},\; (x_1, y_1),\ldots,(x_k, y_k),\; x\big)$$
+```math
+\hat{y} = \arg\max_{y}\; P_{\theta}\big(y \mid \text{description},\; (x_1, y_1),\ldots,(x_k, y_k),\; x\big)
+```
 
 $`k = 0`$ is zero-shot, $`k = 1`$ one-shot, and few-shot uses as many as fit, typically 10 to 100 (pages 5 and 6).
 
@@ -317,11 +355,15 @@ The logic: no gradient step happens. The examples only change what the model con
 
 Labelers rank $`K`$ answers to a prompt $`x`$. The reward model $`r_{\theta}`$ learns to score the preferred answer $`y_w`$ above the other $`y_l`$ in every one of the $`\binom{K}{2}`$ pairs (Equation 1, page 8):
 
-$$\mathrm{loss}(\theta) = -\frac{1}{\binom{K}{2}}\;\mathbb{E}_{(x,\, y_w,\, y_l)\sim D}\Big[\log\sigma\big(r_{\theta}(x, y_w) - r_{\theta}(x, y_l)\big)\Big]$$
+```math
+\mathrm{loss}(\theta) = -\frac{1}{\binom{K}{2}}\;\mathbb{E}_{(x,\, y_w,\, y_l)\sim D}\Big[\log\sigma\big(r_{\theta}(x, y_w) - r_{\theta}(x, y_l)\big)\Big]
+```
 
 The policy is then trained with PPO to maximise reward, with a KL penalty that keeps it close to the supervised model and a term that keeps fitting the pre-training data (Equation 2, page 9):
 
-$$\mathrm{objective}(\phi) = \mathbb{E}_{(x,y)\sim D_{\pi_{\phi}^{\mathrm{RL}}}}\Big[r_{\theta}(x,y) - \beta\log\frac{\pi_{\phi}^{\mathrm{RL}}(y\mid x)}{\pi^{\mathrm{SFT}}(y\mid x)}\Big] + \gamma\;\mathbb{E}_{x\sim D_{\mathrm{pretrain}}}\Big[\log \pi_{\phi}^{\mathrm{RL}}(x)\Big]$$
+```math
+\mathrm{objective}(\phi) = \mathbb{E}_{(x,y)\sim D_{\pi_{\phi}^{\mathrm{RL}}}}\Big[r_{\theta}(x,y) - \beta\log\frac{\pi_{\phi}^{\mathrm{RL}}(y\mid x)}{\pi^{\mathrm{SFT}}(y\mid x)}\Big] + \gamma\;\mathbb{E}_{x\sim D_{\mathrm{pretrain}}}\Big[\log \pi_{\phi}^{\mathrm{RL}}(x)\Big]
+```
 
 The logic: the difference in rewards is the log odds that a labeler prefers one answer (page 8), so the reward model turns a set of rankings into a score for any answer. The $`\beta`$ term stops the policy from drifting into text that fools the reward model, and the $`\gamma`$ term fixes the drop on public benchmarks (page 9).
 
@@ -332,7 +374,9 @@ The logic: the difference in rewards is the log odds that a labeler prefers one 
 
 Each prompt example becomes a triple: question, chain of thought, answer (page 2). With exemplars $`E`$ and a new question $`q`$, the model writes a rationale $`r`$ before the answer $`a`$, so by the chain rule of probability:
 
-$$P(r, a \mid E, q) = P(r \mid E, q)\cdot P(a \mid E, q, r)$$
+```math
+P(r, a \mid E, q) = P(r \mid E, q)\cdot P(a \mid E, q, r)
+```
 
 The logic: the answer is now conditioned on steps the model has already written, and each step is a small computation it can get right. The tokens themselves are not the reason. When the model writes a row of dots as long as the equation it needs, it does about as well as with no help (page 6). The gain appears only at around 100B parameters (page 4).
 
@@ -343,13 +387,19 @@ The logic: the answer is now conditioned on steps the model has already written,
 
 For each question $`q`$, GRPO samples a group of $`G`$ answers from the current policy and scores each one against the others, so it needs no value model (Equations 1 and 3, page 3):
 
-$$\mathcal{J}_{GRPO}(\theta) = \mathbb{E}\Big[\frac{1}{G}\sum_{i=1}^{G}\Big(\min\Big(\frac{\pi_{\theta}(o_i\mid q)}{\pi_{\theta_{old}}(o_i\mid q)}A_i,\; \mathrm{clip}\Big(\frac{\pi_{\theta}(o_i\mid q)}{\pi_{\theta_{old}}(o_i\mid q)},\, 1-\varepsilon,\, 1+\varepsilon\Big)A_i\Big) - \beta\, \mathbb{D}_{KL}\big(\pi_{\theta}\,\Vert\,\pi_{ref}\big)\Big)\Big]$$
+```math
+\mathcal{J}_{GRPO}(\theta) = \mathbb{E}\Big[\frac{1}{G}\sum_{i=1}^{G}\Big(\min\Big(\frac{\pi_{\theta}(o_i\mid q)}{\pi_{\theta_{old}}(o_i\mid q)}A_i,\; \mathrm{clip}\Big(\frac{\pi_{\theta}(o_i\mid q)}{\pi_{\theta_{old}}(o_i\mid q)},\, 1-\varepsilon,\, 1+\varepsilon\Big)A_i\Big) - \beta\, \mathbb{D}_{KL}\big(\pi_{\theta}\,\Vert\,\pi_{ref}\big)\Big)\Big]
+```
 
-$$A_i = \frac{r_i - \mathrm{mean}(r_1,\ldots,r_G)}{\mathrm{std}(r_1,\ldots,r_G)}$$
+```math
+A_i = \frac{r_i - \mathrm{mean}(r_1,\ldots,r_G)}{\mathrm{std}(r_1,\ldots,r_G)}
+```
 
 The reward for R1-Zero is a rule, not a model: a correct final answer plus the right format, with equal weight (Equation 4, page 4):
 
-$$\mathit{Reward}_{rule} = \mathit{Reward}_{acc} + \mathit{Reward}_{format}$$
+```math
+\mathit{Reward}_{rule} = \mathit{Reward}_{acc} + \mathit{Reward}_{format}
+```
 
 The logic: an answer earns a positive advantage only by beating the other answers to the same question, and a correct answer can be checked by a rule or a compiler, so there is no reward model to fool. Nothing rewards how the model reasons, yet its answers grew longer through training and it learned to re-check its work (Figure 1b and Table 2, pages 4 and 5). AIME 2024 accuracy rose from 15.6% to 77.9% (page 4).
 
