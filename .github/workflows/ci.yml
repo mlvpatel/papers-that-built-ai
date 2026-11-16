@@ -1,24 +1,37 @@
 name: ci
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
-permissions:
-  contents: read
+permissions: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
+    name: test
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read # check out the code
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
           cache: pip
-      - name: Install CPU-only PyTorch, then the rest
-        run: |
-          pip install torch==2.15.0 torchvision==0.29.2 --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements.txt -c constraints.txt
-          pip install pytest==9.2.0 pytest-cov==7.1.0 ruff==0.17.5
+          cache-dependency-path: requirements-ci.txt
+      - name: Install the exact CPU wheels, each checked against its hash
+        run: pip install --require-hashes -r requirements-ci.txt
       - name: Lint
         run: ruff check . && ruff format --check .
       - name: Smoke-run every demo (Act 2 with tiny models), with coverage
