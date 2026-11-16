@@ -61,3 +61,30 @@ def test_is_right_compares_numbers_with_a_small_tolerance():
 def test_every_problem_has_a_numeric_answer_key():
     assert len(cot.PROBLEMS) == 12
     assert all(isinstance(answer, (int, float)) for _, answer in cot.PROBLEMS)
+
+
+gpt3 = load("08-gpt3")
+
+
+def test_answer_keeps_only_the_first_line_lowercased():
+    assert gpt3.answer(" Positive\nInput: next review") == "positive"
+
+
+def test_passes_needs_the_answer_at_the_start():
+    assert gpt3.passes(" positive.", "positive")
+    assert gpt3.passes("2021-03-05\nInput:", "2021-03-05")
+    assert not gpt3.passes("the review is positive", "positive")
+    assert not gpt3.passes("2021-03-0", "2021-03-05")
+
+
+def test_prompts_differ_only_in_the_examples():
+    zero = gpt3.prompt("Task.", "x", [])
+    few = gpt3.prompt("Task.", "x", [("a", "b")])
+    assert zero == "Task.\nInput: x\nOutput:"
+    assert few == "Task.\nInput: a\nOutput: b\nInput: x\nOutput:"
+
+
+def test_each_task_has_eight_items_and_no_example_in_the_test_set():
+    for _, items, shots, _ in gpt3.TASKS:
+        assert len(items) == 8
+        assert not {x for x, _ in shots} & {x for x, _ in items}

@@ -20,7 +20,46 @@ The model is GPT-2's design with some sparse attention layers added (page 8), ma
 
 ## Run it
 
-Demo coming in v1.1. It will give Pythia-1.4B, a small open model trained only to predict the next token, two tasks (labelling the sentiment of a sentence, and rewriting a date in a fixed format), first with no examples in the prompt and then with a few. The model, its weights and the test items stay the same; only the prompt changes.
+```bash
+python papers/08-gpt3/demo.py
+```
+
+The first run downloads Pythia-1.4B (about 2.9 GB, pinned to one revision so results repeat), a base model trained only to predict the next token on 2020-era web text. It does two small tasks: label a review positive or negative, and rewrite a date as YYYY-MM-DD. Each item is asked twice: with only the task description, then with a few solved examples above it. The model, its weights and the items stay the same; only the prompt changes. An answer counts when the first line of the reply starts with it.
+
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
+
+```text
+EleutherAI/pythia-1.4b on mps
+
+Classify the review as positive or negative.  (4 examples in the few-shot prompt)
+  want         zero-shot                few-shot
+  positive     'the battery lasts two ' 'positive'
+  negative     'it broke after a week ' 'negative'
+  positive     'positive'               'positive'
+  negative     'the hotel room smelled' 'negative'
+  positive     'the review is positive' 'positive'
+  negative     'i will never get back ' 'negative'
+  positive     'i walked ten miles wit' 'positive'
+  negative     'the app crashes every ' 'negative'
+  zero-shot 1/8, few-shot 8/8
+
+Convert the date to YYYY-MM-DD format.  (3 examples in the few-shot prompt)
+  want         zero-shot                few-shot
+  2021-03-05   'march 5, 2021'          '2021-03-05'
+  1999-12-31   '1999-12-31'             '1999-12-31'
+  1776-07-04   'july 4, 1776'           '1776-07-04'
+  2024-02-29   'february 29, 2024'      '2024-02-29'
+  1492-10-12   'october 12, 1492'       '1492-10-12'
+  2030-06-01   'june 1, 2030'           '2030-06-01'
+  2009-09-09   '2009-09-09'             '2009-09-09'
+  1912-04-15   'april 15, 1912'         '1912-04-15'
+  zero-shot 2/8, few-shot 8/8
+
+zero-shot 3/16, few-shot 16/16
+RESULT before=3 after=16 seconds=12 device=mps items=16
+```
+
+With only the description, the model mostly copies the input or keeps talking: 3 of 16. One more reply says "the review is positive", the right idea in the wrong format. With three or four examples above the question, it gets all 16, in the format the examples show.
 
 ## The paper's numbers
 
