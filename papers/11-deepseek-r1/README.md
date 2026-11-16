@@ -14,7 +14,41 @@ The model taught itself to think longer. Its average answer grew steadily throug
 
 ## Run it
 
-Demo coming in v1.1. It will give the same harder math problems to two models of the same size: Qwen2.5-1.5B-Instruct told to work step by step (step 10), and DeepSeek-R1-Distill-Qwen-1.5B, a small model trained on DeepSeek-R1's reasoning. It will also show a trace where the model checks its own work. The problem set is still being chosen.
+```bash
+python papers/11-deepseek-r1/demo.py
+```
+
+The first run downloads two models of the same size (about 6.6 GB together, each pinned to one revision): Qwen2.5-1.5B-Instruct, told to work step by step as in step 10, and DeepSeek-R1-Distill-Qwen-1.5B, a small model trained on DeepSeek-R1's reasoning. Both get the same four competition-style problems and the same prompt. Qwen uses greedy decoding and up to 1,024 tokens; R1 uses DeepSeek's recommended sampling (temperature 0.6, top-p 0.95, fixed seed) and up to 4,096 tokens. The problems and their answer keys, computed in code, were committed before either model saw them.
+
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
+
+```text
+4 problems on mps
+  instruct  1  want 38  got 38.0  right  (418 tokens)
+  instruct  2  want 97  got 97.0  right  (724 tokens)
+  instruct  3  want 927  got 18.0  wrong  (940 tokens)
+  instruct  4  want 49  got 49.0  right  (547 tokens)
+instruct: 3/4 right, 2,629 tokens, 51 s
+  r1        1  want 38  got 38.0  right  (2,141 tokens)
+  r1        2  want 97  got 97.0  right  (2,248 tokens)
+  r1        3  want 927  got 927.0  right  (2,421 tokens)
+  r1        4  want 49  got 49.0  right  (3,860 tokens)
+r1: 4/4 right, 10,670 tokens, 213 s
+--- R1 checking itself, problem 1 ---
+...the largest integer n such that n squared is less than or equal to 1000.
+
+Let me compute the square root of 1000. The square root of 1000 is approximately 31.622. Since n has to be an integer, the largest n is 31, because 31 squared is 961, and 32 squared is 1024, which is over 1000. So, A is 31.
+
+Wait, hold on. Is 1 counted? Yes, because 1 is 1 squared. So, from 1 to 31 squared, which is 961, up to 1000, that's 31 numbers. So, A = 31.
+
+Now, moving on to B: How many perfect cubes are there between 1 and 1000?
+
+Similarly, the smallest perfect cube is 1, and the largest is 1000. So, I need to f...
+---
+RESULT before=3 after=4 seconds=271 device=mps instruct_tokens=2629 r1_tokens=10670
+```
+
+R1 solves all four, Qwen three. The difference is the staircase problem: Qwen's working went wrong and it answered 18 instead of 927. R1 got there, but it used about four times as many tokens overall (10,670 against 2,629) and took four times as long. The excerpt shows why: it stops to ask itself whether 1 counts as a square before moving on. Four problems is a small test, and R1 samples its answers, so another run can land differently; the paper's own numbers below come from full benchmarks, with each score averaged over several samples (page 41).
 
 ## The paper's numbers
 
