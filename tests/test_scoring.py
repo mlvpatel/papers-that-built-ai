@@ -88,3 +88,34 @@ def test_each_task_has_eight_items_and_no_example_in_the_test_set():
     for _, items, shots, _ in gpt3.TASKS:
         assert len(items) == 8
         assert not {x for x, _ in shots} & {x for x, _ in items}
+
+
+inst = load("09-instructgpt")
+
+
+def test_haiku_check_needs_exactly_three_lines():
+    assert inst.is_haiku(
+        "Bug hides in the loop\n\nprint statements light the dark\nfound it at midnight"
+    )
+    assert not inst.is_haiku("One line only.")
+    assert not inst.is_haiku("a\nb\nc\nd")
+
+
+def test_tips_check_counts_numbered_or_bulleted_items():
+    assert inst.has_three_tips("Tips:\n1. Sleep\n2) Eat\n- Walk")
+    assert not inst.has_three_tips("1. a\n2. b\n3. c\n4. d")
+    assert not inst.has_three_tips("Just focus and sleep well.")
+
+
+def test_sentence_check_allows_one_or_two_sentences():
+    assert inst.at_most_two_sentences(
+        "It is a brain made of math. It learns from examples!"
+    )
+    assert inst.at_most_two_sentences("It learns from examples")
+    assert not inst.at_most_two_sentences("One. Two. Three.")
+    assert not inst.at_most_two_sentences("   ")
+
+
+def test_every_instruction_has_a_check():
+    assert len(inst.INSTRUCTIONS) == 3
+    assert all(callable(check) for _, check in inst.INSTRUCTIONS)
