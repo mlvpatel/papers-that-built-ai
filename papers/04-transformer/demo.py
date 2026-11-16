@@ -4,7 +4,7 @@ Paper: Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin,
 "Attention Is All You Need" (2017), https://arxiv.org/abs/1706.03762
 
 The demo trains two character models of about the same size on Tiny
-Shakespeare with the same data, seed and steps: a recurrent network (GRU) that
+Shakespeare with the same text, seed and steps: a recurrent network (GRU) that
 reads one character at a time, and a 2-block Transformer that looks at every
 earlier character at once through attention. It reports validation loss and
 training time for both.
@@ -95,6 +95,8 @@ def train(name, model, splits, steps, device, eval_batches):
             print(f"  {name:11} step {step:4d}  loss {loss.item():.3f}", flush=True)
     if device == "mps":
         torch.mps.synchronize()
+    elif device == "cuda":
+        torch.cuda.synchronize()
     seconds = time.time() - t0
     model.eval()
     with torch.no_grad():
@@ -135,7 +137,7 @@ def main(argv=None):
 
     results = {}
     for name, cls in [("GRU", CharGRU), ("Transformer", CharTransformer)]:
-        torch.manual_seed(0)  # same batches for both models
+        torch.manual_seed(0)  # same seed; batches differ, init uses the RNG differently
         model = cls(len(chars)).to(args.device)
         results[name] = train(name, model, splits, steps, args.device, eval_batches)
 

@@ -32,7 +32,9 @@ def test_at_least_one_demo_is_found():
 
 
 @pytest.mark.parametrize("device", DEVICES)
-@pytest.mark.parametrize("path", DEMOS, ids=lambda p: p.parent.name)
+@pytest.mark.parametrize(
+    "path", DEMOS, ids=lambda p: p.stem if p.parent.name == "papers" else p.parent.name
+)
 def test_demo_smoke_run_prints_a_result_line(path, device, capsys):
     spec = importlib.util.spec_from_file_location(f"demo_{path.parent.name}", path)
     demo = importlib.util.module_from_spec(spec)

@@ -26,7 +26,7 @@ out = F.scaled_dot_product_attention(q, k, v, is_causal=True)  # all positions a
 python papers/04-transformer/demo.py
 ```
 
-Two character models of about the same size, trained on Tiny Shakespeare with the same data, seed and 1,500 steps: a GRU (a recurrent network) and a 2-block Transformer. Lower validation loss is better.
+Two character models of about the same size, trained on Tiny Shakespeare with the same text, seed and 1,500 steps (each model draws its own random batches from it): a GRU (a recurrent network) and a 2-block Transformer. Lower validation loss is better.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 15 November 2026:
 
@@ -61,7 +61,7 @@ Translation quality (BLEU, higher is better) and training compute on the WMT 201
 | Transformer, base | 27.3 | 38.1 | 3.3 × 10^18 |
 | Transformer, big | 28.4 | 41.8 | 2.3 × 10^19 |
 
-In the paper's words, even the base model "surpasses all previously published models and ensembles, at a fraction of the training cost" (page 8). It trained in 12 hours on eight GPUs (page 7).
+On English-German, in the paper's words, even the base model "surpasses all previously published models and ensembles, at a fraction of the training cost" (page 8). It trained in 12 hours on eight GPUs (page 7).
 
 ## What broke next
 

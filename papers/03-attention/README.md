@@ -8,7 +8,7 @@ Neural translation models of 2014 were encoder-decoders: one recurrent network r
 
 ## The idea
 
-Keep every encoder state instead of only the last one. At each output step, the decoder scores every input position, turns the scores into weights, and reads a weighted mix of the encoder states. The weights are learned along with everything else, so the model learns where to look. The paper notes that its model turns back into the plain encoder-decoder if the context is fixed to the encoder's last state (page 14), and that is exactly the demo's model without attention:
+Keep every encoder state instead of only the last one. At each output step, the decoder scores every input position, turns the scores into weights, and reads a weighted mix of the encoder states. The weights are learned along with everything else, so the model learns where to look. The paper notes that its model turns back into the plain encoder-decoder if the context is fixed to the encoder's final state (page 14), and that is exactly the demo's model without attention:
 
 ```python
 if self.attention:  # Bahdanau: score every input position, then mix them
@@ -56,7 +56,7 @@ On a CPU, use `--quick` (400 steps each). The same pattern, less trained:
 RESULT before=23.4 after=65.3 seconds=25 device=cpu
 ```
 
-The first full run of this demo had no gradient clipping. The attention model's loss fell to 0.199, climbed back to 1.989 by step 2,000, and it finished at 24.2% at length 32, no better than the model without attention. The paper caps the size of each gradient update (page 15), and the demo now does the same; the results above are from that version.
+The first full run of this demo had no gradient clipping. The attention model's loss fell to 0.199, climbed back to 1.989 by step 2,000, and it finished at 24.2% at length 32, no better than the model without attention. The paper caps the size (norm) of each gradient at 1 (pages 14 and 15), and the demo now does the same; the results above are from that version.
 
 ## The paper's numbers
 
@@ -74,4 +74,4 @@ By sentence length, the encoder-decoder's quality "dramatically drops as the len
 
 ## What broke next
 
-Attention fixed the bottleneck, but it still sat on top of a recurrent network that reads one word at a time, which cannot be spread across a GPU. [Step 04](../04-transformer/) keeps the attention and removes the recurrence.
+Attention fixed the bottleneck, but it still sat on top of a recurrent network that reads one word at a time. The Transformer paper names the cost: that "inherently sequential nature precludes parallelization within training examples" (Vaswani et al., page 2). [Step 04](../04-transformer/) keeps the attention and removes the recurrence.

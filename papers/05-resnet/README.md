@@ -66,7 +66,7 @@ Top-1 error on ImageNet validation, in percent with 10-crop testing (Table 2, pa
 | 18 layers | 27.94 | 27.88 |
 | 34 layers | 28.54 | 25.03 |
 
-Going from 18 to 34 layers made the plain network worse and the residual network better. With skip connections the authors kept going: a 152-layer ResNet reached 21.43% top-1 error on the validation set (Table 3, page 6), and an ensemble of these networks won the ILSVRC 2015 classification task with 3.57% top-5 error on the test set (Table 5, page 6).
+Going from 18 to 34 layers made the plain network worse and the residual network better. With skip connections the authors kept going: a 152-layer ResNet reached 21.43% top-1 error on the validation set (Table 3, page 6), and an ensemble of six residual networks of different depths, two of them 152 layers deep, won the ILSVRC 2015 classification task with 3.57% top-5 error on the test set (Table 5, pages 6 and 7).
 
 ## What broke next
 

@@ -45,4 +45,4 @@ The 1986 paper shows backpropagation on its own example tasks in its figures. Th
 
 ## What broke next
 
-Backpropagation can train any network, but a network that sees words as plain symbols has no idea that *king* and *queen* are related. [Step 02](../02-word2vec/) trains a vector for every word so that related words sit close together.
+Backpropagation can train hidden layers, but a network that sees words as plain symbols has no idea that *king* and *queen* are related. [Step 02](../02-word2vec/) trains a vector for every word so that related words sit close together.

@@ -10,9 +10,9 @@ After step 06, a model can learn from any amount of raw text. That leaves practi
 
 Measure it. Kaplan et al. trained Transformers from a thousand to a billion parameters (Figure 2, page 4) and found that loss falls along a smooth power law as model size, data and compute grow. So the result of a big run can be predicted from small ones. Their advice for a fixed budget was to put most of it into model size.
 
-Chinchilla tested that advice with over 400 models (page 1). With compute held fixed, loss against model size has a clear valley (Figure 3, page 6): too small and the model runs out of capacity, too big and it sees too little data. Their conclusion was to grow model size and training data in equal proportion.
+Chinchilla revisited that advice with over 400 models (page 1). With compute held fixed, loss against model size has a clear valley (Figure 3, page 6): too small and the model runs out of capacity, too big and it sees too little data. Their conclusion was to grow model size and training data in equal proportion.
 
-The demo counts compute as parameters times data seen. The papers multiply that by 6 for the forward and backward passes (Kaplan, page 6), a constant that does not change which size wins. Every size gets the same budget:
+The demo counts compute as parameters times data seen. The papers multiply that by 6 for the forward and backward passes (Kaplan, pages 6 and 7), a constant that does not change which size wins. Every size gets the same budget:
 
 ```python
 budget = size(vocab, BUDGET_WIDTH) * steps  # parameters x steps

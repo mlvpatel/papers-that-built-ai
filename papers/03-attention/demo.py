@@ -39,6 +39,8 @@ class Seq2Seq(nn.Module):
             SYMBOLS + 1, EMB
         )  # the extra symbol starts decoding
         self.cell = nn.GRUCell(EMB + HIDDEN, HIDDEN)
+        # built in both models so they start from the same weights; unused without
+        # attention
         self.w_dec = nn.Linear(HIDDEN, HIDDEN, bias=False)
         self.w_enc = nn.Linear(HIDDEN, HIDDEN, bias=False)
         self.v = nn.Linear(HIDDEN, 1, bias=False)
