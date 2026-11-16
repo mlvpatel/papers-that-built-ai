@@ -21,7 +21,49 @@ Writing the steps breaks a problem into parts and leaves a trace you can read wh
 
 ## Run it
 
-Demo coming in v1.1. It will ask Qwen2.5-1.5B-Instruct the same 12 word problems twice: once told to give only the answer, once told to work step by step. The paper puts worked examples in the prompt; the demo asks in words, which an instruction-trained model (step 09) understands.
+```bash
+python papers/10-chain-of-thought/demo.py
+```
+
+The first run downloads Qwen2.5-1.5B-Instruct (about 3.1 GB, pinned to one revision so results repeat). The same model answers the same 12 word problems twice: first told to give only the final number, then told to reason step by step and put the answer in `\boxed{}`. The answer keys are computed in code, and decoding is greedy, so a rerun on the same machine prints the same text. The problems were written on 15 November 2026 for this test and not changed after.
+
+Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
+
+```text
+Qwen/Qwen2.5-1.5B-Instruct on mps; 12 word problems
+  direct   1  want 24  got 18.0  wrong  (3 tokens)
+  direct   2  want 15  got 75.0  wrong  (3 tokens)
+  direct   3  want 162  got 108.0  wrong  (4 tokens)
+  direct   4  want 36  got 48.0  wrong  (3 tokens)
+  direct   5  want 54  got 60.0  wrong  (3 tokens)
+  direct   6  want 75  got 75.0  right  (3 tokens)
+  direct   7  want 6  got 8.0  wrong  (2 tokens)
+  direct   8  want 9368  got 680.0  wrong  (4 tokens)
+  direct   9  want 24  got 24.0  right  (3 tokens)
+  direct  10  want 9  got 912.0  wrong  (4 tokens)
+  direct  11  want 72  got 240.0  wrong  (4 tokens)
+  direct  12  want 46  got 130.0  wrong  (4 tokens)
+direct: 2/12 right, 40 tokens, 1 s
+  steps    1  want 24  got 24.0  right  (319 tokens)
+  steps    2  want 15  got 15.0  right  (279 tokens)
+  steps    3  want 162  got 162.0  right  (392 tokens)
+  steps    4  want 36  got 36.0  right  (308 tokens)
+  steps    5  want 54  got 54.0  right  (329 tokens)
+  steps    6  want 75  got 75.0  right  (319 tokens)
+  steps    7  want 6  got 6.0  right  (290 tokens)
+  steps    8  want 9368  got 9474.0  wrong  (655 tokens)
+  steps    9  want 24  got 24.0  right  (513 tokens)
+  steps   10  want 9  got 9.0  right  (451 tokens)
+  steps   11  want 72  got 72.0  right  (365 tokens)
+  steps   12  want 46  got 46.0  right  (400 tokens)
+steps : 11/12 right, 4,620 tokens, 63 s
+...
+RESULT before=2 after=11 seconds=69 device=mps direct_tokens=40 step_tokens=4620
+```
+
+Told to answer at once, the model gets 2 of 12. Told to write the steps, it gets 11 of 12, using about 385 tokens per problem instead of 3. The one miss is problem 8, the sum of numbers up to 200 divisible by 3 or 5: it answered 9,474 instead of 9,368. Before the RESULT line, the demo prints its full step-by-step reply to the last problem, a quadratic solved line by line.
+
+The paper puts worked examples in the prompt; the demo asks in words, which an instruction-trained model (step 09) understands.
 
 ## The paper's numbers
 
