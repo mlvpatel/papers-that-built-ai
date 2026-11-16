@@ -89,6 +89,10 @@ def answers(name, revision, device, chat):  # pragma: no cover - needs the model
     tok, model = load(name, revision, device)
     result = [reply(tok, model, instruction, chat) for instruction, _ in INSTRUCTIONS]
     del model
+    if device == "mps":  # give its memory back before the next model loads
+        torch.mps.empty_cache()
+    elif device == "cuda":
+        torch.cuda.empty_cache()
     return result
 
 

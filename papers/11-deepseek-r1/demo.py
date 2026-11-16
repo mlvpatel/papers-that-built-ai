@@ -131,6 +131,10 @@ def run(label, name, revision, device, max_new, sample):  # pragma: no cover
         flush=True,
     )
     del model
+    if device == "mps":  # give its memory back before the next model loads
+        torch.mps.empty_cache()
+    elif device == "cuda":
+        torch.cuda.empty_cache()
     return right, tokens, replies
 
 
