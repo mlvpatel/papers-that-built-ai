@@ -17,7 +17,7 @@ flowchart LR
     class A00,A01,A03,A05,B11 gap
 ```
 
-Thick borders mark the papers usually left off the list. The sixth, Chinchilla, shares step 07 with the scaling laws it corrected. Act 1's demos run today; Act 2's pages are here and its demos come in v1.1.
+Thick borders mark the papers usually left off the list. The sixth, Chinchilla, shares step 07 with the scaling laws it corrected. Every step has a demo: Act 1 trains small models from scratch, and Act 2 runs three small open models.
 
 **[Start here: 00 AlexNet](papers/00-alexnet/)**
 
@@ -88,7 +88,7 @@ pip install -r requirements.txt
 python papers/05-resnet/demo.py
 ```
 
-Each demo picks a GPU when it finds one (Apple `mps` or `cuda`) and falls back to the CPU. On a CPU, add `--quick` for a shorter run. Steps 01 to 07 work offline, since Tiny Shakespeare is in the repo; step 00 downloads CIFAR-10 (about 170 MB) on its first run.
+Each demo picks a GPU when it finds one (Apple `mps` or `cuda`) and falls back to the CPU. On a CPU, add `--quick` for a shorter run (Act 1 only). Steps 01 to 07 work offline, since Tiny Shakespeare is in the repo; step 00 downloads CIFAR-10 (about 170 MB) on its first run.
 
 Measured on an Apple M5 Pro (48 GB), 16 November 2026. Each page shows the full output.
 
@@ -105,6 +105,19 @@ Measured on an Apple M5 Pro (48 GB), 16 November 2026. Each page shows the full 
 | [annotated_gpt.py](papers/annotated_gpt.py) | Held-out loss 4.195 → 1.794 | 54 s | 35 s |
 
 Step 04's Transformer is slightly worse after the same number of steps but trains more than twice as fast; the page explains why that speed was the paper's argument. GPU runs are not bit-for-bit repeatable, so steps 03 and annotated_gpt.py land a little differently each time: an earlier run gave 24.5% → 96.7% and 1.814.
+
+### Act 2: small open models
+
+Act 2 downloads three models from Hugging Face on first use, each pinned to one revision so results repeat: Pythia-1.4B (2.9 GB, steps 08 and 09), Qwen2.5-1.5B-Instruct (3.1 GB, steps 09 to 11) and DeepSeek-R1-Distill-Qwen-1.5B (3.6 GB, step 11), 9.6 GB in all. Each model's weights take about 3 GB of memory and the demos load one model at a time, so a laptop with 16 GB of RAM should run them; they were measured on the 48 GB machine above. Act 2 has no `--quick` mode.
+
+| Step | Before → after | Full run, GPU |
+|---|---|---|
+| [08 GPT-3](papers/08-gpt3/) | Items right, no examples → a few examples: 3/16 → 16/16 | 12 s |
+| [09 InstructGPT](papers/09-instructgpt/) | Checks passed, Pythia → Qwen Instruct: 0/3 → 3/3 | 13 s |
+| [10 Chain of Thought](papers/10-chain-of-thought/) | Problems right, answer at once → step by step: 2/12 → 11/12 | 69 s |
+| [11 DeepSeek-R1](papers/11-deepseek-r1/) | Problems right, Qwen step by step → R1-distill: 3/4 → 4/4 | 271 s |
+
+Step 09 compares two different models, because no instruction-tuned copy of Pythia's own weights can be downloaded without signing in; its page explains what that does and does not show. Steps 08 to 10 decode greedily and step 11 samples with a fixed seed, so a rerun on the same machine prints the same answers; only the times change.
 
 ## License
 

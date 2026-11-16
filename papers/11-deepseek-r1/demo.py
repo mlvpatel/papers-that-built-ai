@@ -12,7 +12,7 @@ and their answer keys (computed in code) were committed before the first run.
 Run it from the repo root:
     python papers/11-deepseek-r1/demo.py
 
-The first run downloads both models (about 6.6 GB) into the Hugging Face cache.
+The first run downloads both models (about 6.7 GB) into the Hugging Face cache.
 """
 
 import argparse
