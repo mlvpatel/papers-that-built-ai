@@ -81,14 +81,16 @@ source .venv/bin/activate
 ```
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt -c constraints.txt
 ```
 
 ```bash
 python papers/05-resnet/demo.py
 ```
 
-Each demo picks a GPU when it finds one (Apple `mps` or `cuda`) and falls back to the CPU. On a CPU, add `--quick` for a shorter run (Act 1 only). Steps 01 to 07 work offline, since Tiny Shakespeare is in the repo; step 00 downloads CIFAR-10 (about 170 MB) on its first run.
+Each demo picks a GPU when it finds one (Apple `mps` or `cuda`) and falls back to the CPU, except step 01, whose four XOR points always run on the CPU. Pass `--device cpu`, `mps` or `cuda` to choose. On a CPU, add `--quick` for a shorter run (Act 1 only). Steps 01 to 07 work offline, since Tiny Shakespeare is in the repo; step 00 downloads CIFAR-10 (about 170 MB) on its first run.
+
+Tiny Shakespeare (`data/tinyshakespeare.txt`, 1.1 MB) is the sample of Shakespeare's plays from Andrej Karpathy's [char-rnn](https://github.com/karpathy/char-rnn) project, copied unchanged. The plays are in the public domain.
 
 Measured on an Apple M5 Pro (48 GB), 16 November 2026. Each page shows the full output.
 

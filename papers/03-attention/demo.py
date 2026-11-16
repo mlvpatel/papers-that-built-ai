@@ -28,6 +28,8 @@ SYMBOLS, EMB, HIDDEN, BATCH, LR = 10, 32, 128, 128, 1e-3
 TRAIN_LENGTHS, TEST_LENGTHS, TEST_STRINGS = (4, 32), [8, 16, 32], 500
 STEPS = {"full": 2000, "quick": 400, "smoke": 2}
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 class Seq2Seq(nn.Module):
     def __init__(self, attention):
@@ -96,13 +98,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--quick", action="store_true", help="400 steps each, for a CPU")
     p.add_argument("--smoke", action="store_true", help="2 steps each, for tests")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     steps = STEPS["smoke" if args.smoke else "quick" if args.quick else "full"]

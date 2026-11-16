@@ -30,6 +30,8 @@ BATCH, LR, TIMED_BATCHES = 128, 1e-3, 100
 EPOCHS = {"full": 10, "quick": 4, "smoke": 1}
 CLASSES = 10
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 def fully_connected():
     return nn.Sequential(
@@ -123,13 +125,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--quick", action="store_true", help="4 epochs, for a CPU")
     p.add_argument("--smoke", action="store_true", help="random images, for tests")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     epochs = EPOCHS["smoke" if args.smoke else "quick" if args.quick else "full"]

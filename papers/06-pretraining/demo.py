@@ -33,6 +33,8 @@ WIDTH, HEADS, LAYERS, CONTEXT, BATCH = 128, 4, 4, 64, 64
 TRAIN_LINES, TEST_LINES, MIN_WORDS = 300, 500, 6
 STEPS = {"full": 3000, "quick": 600, "smoke": 2}
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 def normalize(text):
     """Lowercase, keep letters, apostrophes and newlines, one space between words."""
@@ -118,13 +120,12 @@ def main(argv=None):
         "--quick", action="store_true", help="600 steps per model, for a CPU"
     )
     p.add_argument("--smoke", action="store_true", help="a few steps, for tests")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     steps = STEPS["smoke" if args.smoke else "quick" if args.quick else "full"]

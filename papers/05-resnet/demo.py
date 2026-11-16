@@ -28,6 +28,8 @@ WIDTH, HEADS, CONTEXT, BATCH, LR = 128, 4, 64, 64, 1e-3
 STEPS = {"full": 1000, "quick": 250, "smoke": 2}
 RUNS = [("shallow", 2, False), ("before", 24, False), ("after", 24, True)]
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 class Block(nn.Module):
     def __init__(self, skip):
@@ -107,13 +109,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--quick", action="store_true", help="250 steps per run, for a CPU")
     p.add_argument("--smoke", action="store_true", help="2 steps per run, for tests")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     mode = "smoke" if args.smoke else "quick" if args.quick else "full"

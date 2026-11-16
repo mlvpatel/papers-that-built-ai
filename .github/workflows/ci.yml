@@ -17,9 +17,9 @@ jobs:
       - name: Install CPU-only PyTorch, then the rest
         run: |
           pip install torch==2.15.0 torchvision==0.29.2 --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements.txt
+          pip install -r requirements.txt -c constraints.txt
           pip install pytest==9.2.0 pytest-cov==7.1.0 ruff==0.17.5
       - name: Lint
         run: ruff check . && ruff format --check .
-      - name: Smoke-run every Act 1 demo, with coverage
+      - name: Smoke-run every demo (Act 2 with tiny models), with coverage
         run: python -m pytest -q --cov=papers --cov-report=term-missing --cov-fail-under=80

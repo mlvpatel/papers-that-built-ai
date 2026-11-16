@@ -30,6 +30,8 @@ R1 = (
 STEPS = "\nPlease reason step by step, and put your final answer within \\boxed{}."
 INSTRUCT_TOKENS, R1_TOKENS = 1024, 4096
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 def _same_colour():
     together = comb(5, 2) + comb(7, 2)  # two red or two blue
@@ -134,13 +136,12 @@ def run(label, name, revision, device, max_new, sample):  # pragma: no cover
 
 def main(argv=None):  # pragma: no cover - needs the models
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     t0 = time.time()

@@ -26,6 +26,8 @@ STEPS = {"full": 2000, "quick": 2000, "smoke": 2}
 X = torch.tensor([[0.0, 0.0], [0.0, 1.0], [1.0, 0.0], [1.0, 1.0]])
 Y = torch.tensor([[0.0], [1.0], [1.0], [0.0]])  # XOR
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 def train(model, steps, device):
     x, y = X.to(device), Y.to(device)
@@ -43,7 +45,13 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--quick", action="store_true", help="same as the full run")
     p.add_argument("--smoke", action="store_true", help="2 steps, for the tests")
-    p.add_argument("--device", default="cpu")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
+    p.add_argument(
+        "--device",
+        default="cpu",
+        choices=devices,
+        help="where to run (default: cpu, since XOR needs no GPU)",
+    )
     args = p.parse_args(argv)
     steps = STEPS["smoke" if args.smoke else "quick" if args.quick else "full"]
     t0 = time.time()

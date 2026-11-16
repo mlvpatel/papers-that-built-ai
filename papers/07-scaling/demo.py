@@ -32,6 +32,8 @@ WIDTHS, LAYERS, CONTEXT, BATCH, LR = [32, 64, 96, 128, 192], 4, 64, 64, 1e-3
 STEPS = {"full": 1000, "quick": 250, "smoke": 2}
 BUDGET_WIDTH = 64  # the fixed compute budget is this width's run in part 1
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 class Block(nn.Module):
     def __init__(self, width):
@@ -115,13 +117,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--quick", action="store_true", help="250 steps per size, for a CPU")
     p.add_argument("--smoke", action="store_true", help="2 steps per size, for tests")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     mode = "smoke" if args.smoke else "quick" if args.quick else "full"

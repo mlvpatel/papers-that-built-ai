@@ -27,6 +27,8 @@ DIRECT = "\nAnswer with only the final number, no explanation."
 STEPS = "\nPlease reason step by step, and put your final answer within \\boxed{}."
 DIRECT_TOKENS, STEP_TOKENS = 16, 768
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 def _pizza():
     slices = 24
@@ -178,13 +180,12 @@ def run(tok, model, suffix, max_new, first, label):  # pragma: no cover - needs 
 
 def main(argv=None):  # pragma: no cover - needs the model
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     t0 = time.time()

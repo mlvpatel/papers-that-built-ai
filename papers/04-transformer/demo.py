@@ -28,6 +28,8 @@ CONTEXT, BATCH, LR = 64, 64, 1e-3
 WIDTH, HEADS, LAYERS, GRU_HIDDEN = 128, 4, 2, 256  # about 0.4M parameters each
 STEPS = {"full": 1500, "quick": 300, "smoke": 2}
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 class CharGRU(nn.Module):
     def __init__(self, vocab):
@@ -115,13 +117,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--quick", action="store_true", help="300 steps each, for a CPU")
     p.add_argument("--smoke", action="store_true", help="2 steps each, for tests")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     steps = STEPS["smoke" if args.smoke else "quick" if args.quick else "full"]

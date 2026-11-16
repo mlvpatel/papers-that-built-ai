@@ -30,6 +30,8 @@ TOKENS_PER_PARAM = 20  # [07 Chinchilla] about 20 training tokens per parameter
 STEPS = {"quick": 1000, "smoke": 2}  # [07 Chinchilla] full run: the token budget
 SAMPLE_CHARS, EVAL_BATCHES = 200, 10
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 class Block(nn.Module):
     def __init__(self):
@@ -123,13 +125,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--quick", action="store_true", help="1,000 steps, for a CPU")
     p.add_argument("--smoke", action="store_true", help="2 steps, for tests")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     t0 = time.time()

@@ -49,6 +49,8 @@ RELATED = [
 ]
 PROBES = ["king", "love", "night"]
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 def words_of(text):
     """Lowercase words of the dialogue, without the speaker headings."""
@@ -78,13 +80,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--quick", action="store_true", help="1000 steps, for a CPU")
     p.add_argument("--smoke", action="store_true", help="2 steps, for the tests")
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     steps = STEPS["smoke" if args.smoke else "quick" if args.quick else "full"]

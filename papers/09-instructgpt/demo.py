@@ -27,6 +27,8 @@ BASE = ("EleutherAI/pythia-1.4b", "fedc38a16eea3bd36a96b906d78d11d2ce18ed79")
 INSTRUCT = ("Qwen/Qwen2.5-1.5B-Instruct", "989aa7980e4cf806f80c7fef2b1adb7bc71aa306")
 MAX_NEW = 120  # the same budget for both models
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 def lines(text):
     return [line for line in text.strip().splitlines() if line.strip()]
@@ -92,13 +94,12 @@ def answers(name, revision, device, chat):  # pragma: no cover - needs the model
 
 def main(argv=None):  # pragma: no cover - needs the models
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     t0 = time.time()

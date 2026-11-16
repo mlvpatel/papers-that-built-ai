@@ -60,6 +60,8 @@ TASKS = [
     ("Convert the date to YYYY-MM-DD format.", DATES, DATE_EXAMPLES, 12),
 ]
 
+GPUS = [("mps", torch.backends.mps.is_available()), ("cuda", torch.cuda.is_available())]
+
 
 def prompt(task, x, examples):
     """The task line, then any solved examples, then the item to complete."""
@@ -97,13 +99,12 @@ def complete(tok, model, text, max_new):  # pragma: no cover - needs the model
 
 def main(argv=None):  # pragma: no cover - needs the model
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
-        default="mps"
-        if torch.backends.mps.is_available()
-        else "cuda"
-        if torch.cuda.is_available()
-        else "cpu",
+        default=devices[0],
+        choices=devices,
+        help="where to run (default: a GPU if found, else cpu)",
     )
     args = p.parse_args(argv)
     t0 = time.time()
