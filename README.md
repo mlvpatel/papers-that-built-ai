@@ -73,7 +73,7 @@ It trains on Tiny Shakespeare in 54 seconds on an Apple M5 Pro GPU, then writes 
 You need Python 3.12. From a clone of this repo:
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 ```
 
 ```bash
