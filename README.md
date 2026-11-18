@@ -5,7 +5,6 @@
 14 landmark papers from 1986 to 2025, each with a short page and a demo you run on your own machine.
 
 [![CI](https://github.com/mlvpatel/papers-that-built-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/mlvpatel/papers-that-built-ai/actions/workflows/ci.yml)
-[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/mlvpatel/papers-that-built-ai/badge)](https://scorecard.dev/viewer/?uri=github.com/mlvpatel/papers-that-built-ai)
 ![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB)
 ![PyTorch 2.15](https://img.shields.io/badge/PyTorch-2.15-EE4C2C)
 [![Code: MIT](https://img.shields.io/badge/code-MIT-2EA44F)](LICENSE)
