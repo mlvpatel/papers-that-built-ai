@@ -123,8 +123,9 @@ def seconds_for_batches(x, y, norm, device):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    p.add_argument("--quick", action="store_true", help="4 epochs, for a CPU")
-    p.add_argument("--smoke", action="store_true", help="random images, for tests")
+    speed = p.add_mutually_exclusive_group()
+    speed.add_argument("--quick", action="store_true", help="4 epochs, for a CPU")
+    speed.add_argument("--smoke", action="store_true", help="random images, for tests")
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
@@ -137,7 +138,8 @@ def main(argv=None):
     t0 = time.time()
 
     x_train, y_train, x_test, y_test = load(args.smoke)
-    pixels = x_train.float() / 255
+    # divide in place: one float copy of the photos, not two
+    pixels = x_train.float().div_(255)
     mean = pixels.mean((0, 2, 3)).view(1, 3, 1, 1)
     std = pixels.std((0, 2, 3)).view(1, 3, 1, 1)
 

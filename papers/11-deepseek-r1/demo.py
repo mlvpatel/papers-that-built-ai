@@ -17,6 +17,7 @@ The first run downloads both models (about 6.7 GB) into the Hugging Face cache.
 
 import argparse
 import re
+import sys
 import time
 from math import comb, gcd
 
@@ -117,6 +118,9 @@ def run(label, name, revision, device, max_new, sample):  # pragma: no cover
     torch.manual_seed(0)
     right, tokens, replies, t0 = 0, 0, [], time.time()
     for i, (question, want) in enumerate(PROBLEMS, 1):
+        print(
+            f"  {label}  problem {i} of {len(PROBLEMS)}...", file=sys.stderr, flush=True
+        )
         reply, n = solve(tok, model, question, max_new, sample)
         got = number(reply)
         ok = got is not None and abs(got - want) < 1e-6

@@ -41,6 +41,8 @@ RESULT before=2.21 after=1.66 seconds=106 device=mps best_size_at_fixed_compute=
 
 ![Validation loss against model size: falling with the same steps, a valley with the same compute](scaling.png)
 
+A full run saves its own plot over this `scaling.png`, so `git status` shows it as changed afterwards. `--quick` and `--smoke` runs leave it alone.
+
 With the same steps, every bigger model is better. With the same compute, the best model is the 64-wide one with about 200,000 parameters, not the biggest: the largest model gets only 112 steps and finishes worst. The small side of the valley is shallow. The 32-wide model is 0.02 behind, which is within the run-to-run noise Kaplan et al. report for their own models (0.05, Figure 22, page 26).
 
 On a CPU, use `--quick` (250 steps per size). With a budget that small the smallest model comes out best, so only the large side of the valley shows:

@@ -4,51 +4,49 @@ The demos themselves load 1.5B-parameter models, too big for CI, so only their
 pure helpers are tested here.
 """
 
-import importlib.util
-from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-
-
-def load(folder):
-    path = ROOT / "papers" / folder / "demo.py"
-    spec = importlib.util.spec_from_file_location(f"demo_{folder}", path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
+import pytest
+from demo_loader import load
 
 cot = load("10-chain-of-thought")
+r1 = load("11-deepseek-r1")
+# Steps 10 and 11 each keep their own copy of number(); these tests hold both to it.
+NUMBER = pytest.mark.parametrize("number", [cot.number, r1.number], ids=["10", "11"])
 
 
-def test_number_reads_the_last_boxed_answer():
-    assert cot.number(r"so 3 + 4 = 7, and \boxed{12} not \boxed{24}") == 24
+@NUMBER
+def test_number_reads_the_last_boxed_answer(number):
+    assert number(r"so 3 + 4 = 7, and \boxed{12} not \boxed{24}") == 24
 
 
-def test_number_ignores_text_outside_the_box():
-    assert cot.number(r"step 1 gives 5, step 2 gives 9. \boxed{14}") == 14
+@NUMBER
+def test_number_ignores_text_outside_the_box(number):
+    assert number(r"step 1 gives 5, step 2 gives 9. \boxed{14}") == 14
 
 
-def test_number_strips_thousands_commas():
-    assert cot.number("The sum is 1,234,567.") == 1234567
+@NUMBER
+def test_number_strips_thousands_commas(number):
+    assert number("The sum is 1,234,567.") == 1234567
 
 
-def test_number_keeps_decimals_and_signs():
-    assert cot.number("It costs 54.5 dollars") == 54.5
-    assert cot.number("The answer is -19") == -19
+@NUMBER
+def test_number_keeps_decimals_and_signs(number):
+    assert number("It costs 54.5 dollars") == 54.5
+    assert number("The answer is -19") == -19
 
 
-def test_number_takes_the_last_number_without_a_box():
-    assert cot.number("First 3 apples, then 9 apples") == 9
+@NUMBER
+def test_number_takes_the_last_number_without_a_box(number):
+    assert number("First 3 apples, then 9 apples") == 9
 
 
 def test_number_takes_the_first_number_when_asked():
     assert cot.number("24. Because 4 * 6 = 24 and 2 more", first=True) == 24
 
 
-def test_number_returns_none_when_there_is_no_number():
-    assert cot.number("I am not sure.") is None
-    assert cot.number(r"\boxed{x}") is None
+@NUMBER
+def test_number_returns_none_when_there_is_no_number(number):
+    assert number("I am not sure.") is None
+    assert number(r"\boxed{x}") is None
 
 
 def test_is_right_compares_numbers_with_a_small_tolerance():
@@ -119,14 +117,6 @@ def test_sentence_check_allows_one_or_two_sentences():
 def test_every_instruction_has_a_check():
     assert len(inst.INSTRUCTIONS) == 3
     assert all(callable(check) for _, check in inst.INSTRUCTIONS)
-
-
-r1 = load("11-deepseek-r1")
-
-
-def test_r1_reads_the_boxed_answer():
-    assert r1.number(r"Wait, let me check. \boxed{97}") == 97
-    assert r1.number("no answer here") is None
 
 
 def test_r1_excerpt_shows_text_around_the_first_wait():

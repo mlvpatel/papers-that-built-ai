@@ -18,6 +18,7 @@ Run it from the repo root:
 
 import argparse
 import io
+import sys
 import time
 from pathlib import Path
 
@@ -115,8 +116,13 @@ def plot(sizes, fixed_steps, fixed_compute, steps, target):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    p.add_argument("--quick", action="store_true", help="250 steps per size, for a CPU")
-    p.add_argument("--smoke", action="store_true", help="2 steps per size, for tests")
+    speed = p.add_mutually_exclusive_group()
+    speed.add_argument(
+        "--quick", action="store_true", help="250 steps per size, for a CPU"
+    )
+    speed.add_argument(
+        "--smoke", action="store_true", help="2 steps per size, for tests"
+    )
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
@@ -154,6 +160,7 @@ def main(argv=None):
     fixed_steps, fixed_compute = [], []
     for width, n in zip(WIDTHS, sizes):
         budget_steps = max(1, round(budget / n))  # smaller models get more steps
+        print(f"  training width {width}...", file=sys.stderr, flush=True)
         fixed_steps.append(loss(width, steps))
         fixed_compute.append(loss(width, budget_steps))
         print(

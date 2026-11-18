@@ -116,10 +116,11 @@ def picks_real(model, pairs, stoi, device):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    p.add_argument(
+    speed = p.add_mutually_exclusive_group()
+    speed.add_argument(
         "--quick", action="store_true", help="600 steps per model, for a CPU"
     )
-    p.add_argument("--smoke", action="store_true", help="a few steps, for tests")
+    speed.add_argument("--smoke", action="store_true", help="a few steps, for tests")
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
@@ -136,7 +137,9 @@ def main(argv=None):
         {
             ln
             for ln in text.split("\n")
-            if len(ln.split()) >= MIN_WORDS and len(ln) <= CONTEXT
+            if len(ln.split()) >= MIN_WORDS
+            and len(ln) <= CONTEXT
+            and len(set(ln.split())) > 1  # shuffled() could never change it
         }
     )
     # keep out the test lines of the earlier fine-tuning attempt (see README)
@@ -149,7 +152,8 @@ def main(argv=None):
     corpus = text
     for line in test_lines:  # test lines never appear in model B's text
         corpus = corpus.replace(line, "")
-    assert not any(line in corpus for line in test_lines)
+    if any(line in corpus for line in test_lines):
+        raise SystemExit("a test line is still in model B's text")
     print(f"{len(pairs)} test pairs; chance is 50%")
     print(f"  real:     {pairs[0][0]}\n  shuffled: {pairs[0][1]}")
 
