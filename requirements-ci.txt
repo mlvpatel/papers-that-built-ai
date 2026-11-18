@@ -222,7 +222,9 @@ coverage==7.17.3 \
     --hash=sha256:ff0ca078fe63faffff1cff24c804afd4010e35d9c75bb593877b3d4321826c91 \
     --hash=sha256:ff273110e4e1505ef7a642523ba43f58eb6770ae9e8f869d72efea816cb4bc2c \
     --hash=sha256:ff5069e99039739c2fade5dd12cf8df7dc1b1217a0b915110605e0bbdddf1187
-    # via pytest-cov
+    # via
+    #   -r ci-tools.txt
+    #   pytest-cov
 cycler==0.12.1 \
     --hash=sha256:85cef7cff222d8644161529808465972e51340599459b8ac3ccbac5a854e0d30 \
     --hash=sha256:88bb128f02ba341da8ef447245a9e138fae777f6a23943da4540077d3601eb1c
@@ -368,7 +370,9 @@ idna==3.20 \
 iniconfig==2.3.1 \
     --hash=sha256:67f4b9c50da0dedf52af349e7749a80a9057a5031199791b906c3bb3ae878960 \
     --hash=sha256:9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7
-    # via pytest
+    # via
+    #   -r ci-tools.txt
+    #   pytest
 jinja2==3.1.6 \
     --hash=sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67
     # via
@@ -929,6 +933,7 @@ pluggy==1.7.0 \
     --hash=sha256:7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec \
     --hash=sha256:d1eaa46ebb595891b860ab086b4d09c8588af65ebd4361b8e8f4bb8920b90ba8
     # via
+    #   -r ci-tools.txt
     #   pytest
     #   pytest-cov
 pydantic==2.14.3 \
@@ -1098,12 +1103,12 @@ pytest==9.2.0 \
     --hash=sha256:07acdcf88ec174f907dc01af70bf52d49b014bbab03faeeade31c96b18c2e588 \
     --hash=sha256:97c4f3b1f3c7414aa36465e09b8220f1d03627993bd51b1282e193753c80557b
     # via
-    #   -r ci-tools.in.tmp
+    #   -r ci-tools.txt
     #   pytest-cov
 pytest-cov==7.1.0 \
     --hash=sha256:30674f2b5f6351aa09702a9c8c364f6a01c27aae0c1366ae8016160d1efc56b2 \
     --hash=sha256:a0461110b7865f9a271aa1b51e516c9a95de9d696734a2f71e3e78f46e1d4678
-    # via -r ci-tools.in.tmp
+    # via -r ci-tools.txt
 python-dateutil==4.0.0 \
     --hash=sha256:a5e246f79eb80475e691bf93862cead98decd8a498cf53ba0516fcdc0f50dc1c \
     --hash=sha256:d7295ff14fdc0f92f662100bfb6c551d160ca090f2939f1ec5b9794265c03f06
@@ -1331,7 +1336,7 @@ ruff==0.17.5 \
     --hash=sha256:e52622ecf3a0df9d03e796fe3eed4aa085adda65520db7e0619cbd2192a97342 \
     --hash=sha256:ec4ecf40fb4d6e1265b009dbe551727920926fc0f769070c452d6d84b422a74d \
     --hash=sha256:f93d2b7d449ed9545304f6923699ca20d13c675b69f258481709a08ae61076db
-    # via -r ci-tools.in.tmp
+    # via -r ci-tools.txt
 safetensors==0.8.0 \
     --hash=sha256:040070828e36dc8e122178bbbd5830ff9e97920affb84cbe0f46442497bed358 \
     --hash=sha256:096ec1a98435df7beb08853bb5aa9081a84f23d0adc67ed1a0a10550f608373f \
@@ -1431,7 +1436,7 @@ torch==2.15.0+cpu \
     --hash=sha256:fe17318e964a6eb4b1380fd6dcd5405264af3e54b10bce7abcce5fa701a3f049
     # via
     #   -c constraints.txt
-    #   --override /private/tmp/claude-501/-Users-mlvpatel-Downloads-6RPaper/4b8bf45f-67a9-416a-a11e-4a7488fb2046/scratchpad/cpu-overrides.txt
+    #   --override cpu.txt
     #   -r requirements.txt
     #   torchvision
 torchvision==0.29.2+cpu \
@@ -1440,7 +1445,7 @@ torchvision==0.29.2+cpu \
     --hash=sha256:87631236a47be98ab21301e8cb4fc1cbb9325fe0aa7a022e18d2f894087b68c3
     # via
     #   -c constraints.txt
-    #   --override /private/tmp/claude-501/-Users-mlvpatel-Downloads-6RPaper/4b8bf45f-67a9-416a-a11e-4a7488fb2046/scratchpad/cpu-overrides.txt
+    #   --override cpu.txt
     #   -r requirements.txt
 tqdm==4.70.1 \
     --hash=sha256:c293e525e6fef9c20e8728fd4612df02a0aa31bb5fe91ecd93e123b1b7bffa73 \
