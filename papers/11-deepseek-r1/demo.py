@@ -112,7 +112,7 @@ def solve(tok, model, question, max_new, sample):
     chat = [{"role": "user", "content": question + STEPS}]
     text = tok.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
     ids = tok(text, return_tensors="pt").to(model.device)
-    if sample:  # DeepSeek's recommended settings for the R1 models
+    if sample:  # temperature as DeepSeek recommends; top-p as in its evaluations
         settings = {"do_sample": True, "temperature": 0.6, "top_p": 0.95}
     else:
         settings = {"do_sample": False}
