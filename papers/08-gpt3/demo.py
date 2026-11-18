@@ -84,7 +84,10 @@ def load(device):  # pragma: no cover - downloads a 2.9 GB model, too big for CI
     try:  # the first run downloads the model
         tok = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
         model = AutoModelForCausalLM.from_pretrained(
-            MODEL, revision=REVISION, dtype=torch.bfloat16
+            MODEL,
+            revision=REVISION,
+            dtype=torch.bfloat16,
+            use_safetensors=True,  # never unpickle downloaded weights
         )
     except OSError as err:  # no network, the Hub is down, or the disk is full
         raise SystemExit(f"Could not load {MODEL}: {err}") from err
