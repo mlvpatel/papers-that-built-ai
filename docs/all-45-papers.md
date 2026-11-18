@@ -3,13 +3,13 @@
 
 ## Executive summary
 
-Six papers usually stand for modern AI: Word2Vec, the Transformer, GPT-1 and BERT, the scaling laws and GPT-3, InstructGPT, and Chain of Thought. Together they tell one story well: how text became a language model you can talk to. But that story has gaps. The biggest is between Word2Vec (2013) and the Transformer (2017): attention was invented in 2014, and the Transformer kept attention and threw out the RNN around it. The usual list also leaves out the papers that started deep learning (AlexNet, ResNet), the paper RLHF actually came from (Christiano 2017), the correction to Kaplan's scaling laws (Chinchilla 2022), and the follow-up to Chain of Thought (DeepSeek-R1, 2025: reasoning learned through reinforcement learning).
+Eight papers usually stand for modern AI: Word2Vec, the Transformer, GPT-1, BERT, the scaling laws, GPT-3, InstructGPT and Chain of Thought. Together they tell one story well: how text became a language model you can talk to. But that story has gaps. The biggest is between Word2Vec (2013) and the Transformer (2017): attention was invented in 2014, and the Transformer kept attention and threw out the RNN around it. The usual list also leaves out the papers that started deep learning (AlexNet, ResNet), the paper RLHF actually came from (Christiano 2017), the correction to Kaplan's scaling laws (Chinchilla 2022), and the follow-up to Chain of Thought (DeepSeek-R1, 2025: reasoning learned through reinforcement learning).
 
 ---
 
 ## Complete table: all 45 papers
 
-Year = first public release (arXiv preprint or journal). Tiers: Famous 6 (8 papers) · Must-add (6) · Core = rest of the LLM story (11) · Beyond LLMs (12) · Practical (6) · Watch (2).
+Year = first public release (arXiv preprint or journal). Tiers: Famous (8) · Must-add (6) · Core = rest of the LLM story (11) · Beyond LLMs (12) · Practical (6) · Watch (2).
 
 | # | Year | Paper | Authors (lab) | Area | Key idea | Tier |
 |---|------|-------|---------------|------|----------|------|
@@ -19,7 +19,7 @@ Year = first public release (arXiv preprint or journal). Tiers: Famous 6 (8 pape
 | 4 | 1998 | [Gradient-Based Learning Applied to Document Recognition](https://doi.org/10.1109/5.726791) | LeCun, Bottou, Bengio, Haffner (AT&T Labs) | Vision | Convolutional networks (LeNet) read handwriting | Beyond LLMs |
 | 5 | 2003 | [A Neural Probabilistic Language Model](https://www.jmlr.org/papers/v3/bengio03a.html) | Bengio, Ducharme, Vincent, Jauvin (U Montréal) | Language | First neural language model with learned word vectors | Core |
 | 6 | 2012 | [ImageNet Classification with Deep CNNs (AlexNet)](https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html) | Krizhevsky, Sutskever, Hinton (U Toronto) | Vision | Deep CNN on GPUs wins ImageNet; deep learning begins | Must-add |
-| 7 | 2013 | [Word2Vec](https://arxiv.org/abs/1301.3781) | Mikolov, Chen, Corrado, Dean (Google) | Language | Words become coordinates | Famous 6 |
+| 7 | 2013 | [Word2Vec](https://arxiv.org/abs/1301.3781) | Mikolov, Chen, Corrado, Dean (Google) | Language | Words become coordinates | Famous |
 | 8 | 2014 | [Generative Adversarial Networks](https://arxiv.org/abs/1406.2661) | Goodfellow et al. (U Montréal) | Generation | Generator vs. discriminator; realistic generated images | Beyond LLMs |
 | 9 | 2014 | [Sequence to Sequence Learning](https://arxiv.org/abs/1409.3215) | Sutskever, Vinyals, Le (Google) | Language | Encoder-decoder: read a sequence, write a sequence | Core |
 | 10 | 2014 | [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473) | Bahdanau, Cho, Bengio (U Montréal) | Language | Attention is born: look back at every input word | Must-add |
@@ -29,14 +29,14 @@ Year = first public release (arXiv preprint or journal). Tiers: Famous 6 (8 pape
 | 14 | 2016 | [Mastering Go (AlphaGo)](https://doi.org/10.1038/nature16961) | Silver et al. (DeepMind) | RL | Neural nets + tree search beat a Go world champion | Beyond LLMs |
 | 15 | 2016 | [Layer Normalization](https://arxiv.org/abs/1607.06450) | Ba, Kiros, Hinton (U Toronto) | Training | The normalization inside every Transformer block | Core |
 | 16 | 2017 | [Sparsely-Gated Mixture of Experts](https://arxiv.org/abs/1701.06538) | Shazeer et al. (Google Brain) | Architecture | Send each token to a few expert sub-networks | Core |
-| 17 | 2017 | [Attention Is All You Need](https://arxiv.org/abs/1706.03762) | Vaswani et al. (Google) | Architecture | The Transformer | Famous 6 |
+| 17 | 2017 | [Attention Is All You Need](https://arxiv.org/abs/1706.03762) | Vaswani et al. (Google) | Architecture | The Transformer | Famous |
 | 18 | 2017 | [Deep RL from Human Preferences](https://arxiv.org/abs/1706.03741) | Christiano, Leike, Brown, Martic, Legg, Amodei (OpenAI, DeepMind) | Alignment | Reward model from human A-vs-B choices: origin of RLHF | Must-add |
 | 19 | 2017 | [Proximal Policy Optimization (PPO)](https://arxiv.org/abs/1707.06347) | Schulman et al. (OpenAI) | RL | Stable RL algorithm used inside InstructGPT | Core |
-| 20 | 2018 | [GPT-1](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) | Radford, Narasimhan, Salimans, Sutskever (OpenAI) | Language | Pre-train a Transformer on raw text, then fine-tune | Famous 6 |
-| 21 | 2018 | [BERT](https://arxiv.org/abs/1810.04805) | Devlin, Chang, Lee, Toutanova (Google) | Language | Bidirectional pre-training by predicting masked words | Famous 6 |
+| 20 | 2018 | [GPT-1](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) | Radford, Narasimhan, Salimans, Sutskever (OpenAI) | Language | Pre-train a Transformer on raw text, then fine-tune | Famous |
+| 21 | 2018 | [BERT](https://arxiv.org/abs/1810.04805) | Devlin, Chang, Lee, Toutanova (Google) | Language | Bidirectional pre-training by predicting masked words | Famous |
 | 22 | 2019 | [GPT-2](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) | Radford et al. (OpenAI) | Language | Zero-shot tasks with no fine-tuning | Core |
-| 23 | 2020 | [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) | Kaplan et al. (OpenAI) | Scaling | Loss falls predictably with size, data and compute | Famous 6 |
-| 24 | 2020 | [GPT-3: Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) | Brown et al. (OpenAI) | Language | 175B parameters; learns tasks from examples in the prompt | Famous 6 |
+| 23 | 2020 | [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) | Kaplan et al. (OpenAI) | Scaling | Loss falls predictably with size, data and compute | Famous |
+| 24 | 2020 | [GPT-3: Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) | Brown et al. (OpenAI) | Language | 175B parameters; learns tasks from examples in the prompt | Famous |
 | 25 | 2020 | [Retrieval-Augmented Generation (RAG)](https://arxiv.org/abs/2005.11401) | Lewis et al. (Facebook AI) | Engineering | Retrieve documents, then generate from them | Practical |
 | 26 | 2020 | [Denoising Diffusion Probabilistic Models](https://arxiv.org/abs/2006.11239) | Ho, Jain, Abbeel (UC Berkeley) | Generation | Learn to remove noise step by step | Beyond LLMs |
 | 27 | 2020 | [Vision Transformer (ViT)](https://arxiv.org/abs/2010.11929) | Dosovitskiy et al. (Google) | Vision | Transformers on image patches replace CNNs | Beyond LLMs |
@@ -44,8 +44,8 @@ Year = first public release (arXiv preprint or journal). Tiers: Famous 6 (8 pape
 | 29 | 2021 | [LoRA](https://arxiv.org/abs/2106.09685) | Hu et al. (Microsoft) | Engineering | Fine-tune by training small low-rank matrices | Practical |
 | 30 | 2021 | [AlphaFold 2](https://doi.org/10.1038/s41586-021-03819-2) | Jumper et al. (DeepMind) | Science | Protein structure from sequence; 2024 Nobel Prize | Beyond LLMs |
 | 31 | 2021 | [Latent Diffusion (Stable Diffusion)](https://arxiv.org/abs/2112.10752) | Rombach et al. (LMU Munich, Runway) | Generation | Diffusion in a compressed space, cheap enough for a laptop | Beyond LLMs |
-| 32 | 2022 | [Chain-of-Thought Prompting](https://arxiv.org/abs/2201.11903) | Wei et al. (Google) | Reasoning | Write the steps before the answer | Famous 6 |
-| 33 | 2022 | [InstructGPT](https://arxiv.org/abs/2203.02155) | Ouyang et al. (OpenAI) | Alignment | RLHF makes GPT-3 follow instructions | Famous 6 |
+| 32 | 2022 | [Chain-of-Thought Prompting](https://arxiv.org/abs/2201.11903) | Wei et al. (Google) | Reasoning | Write the steps before the answer | Famous |
+| 33 | 2022 | [InstructGPT](https://arxiv.org/abs/2203.02155) | Ouyang et al. (OpenAI) | Alignment | RLHF makes GPT-3 follow instructions | Famous |
 | 34 | 2022 | [Chinchilla](https://arxiv.org/abs/2203.15556) | Hoffmann et al. (DeepMind) | Scaling | About 20 tokens per parameter; corrects Kaplan | Must-add |
 | 35 | 2022 | [FlashAttention](https://arxiv.org/abs/2205.14135) | Dao et al. (Stanford) | Engineering | Fast, memory-efficient exact attention | Practical |
 | 36 | 2022 | [ReAct](https://arxiv.org/abs/2210.03629) | Yao et al. (Princeton, Google) | Agents | Alternate reasoning and tool actions | Practical |
@@ -63,6 +63,8 @@ Year = first public release (arXiv preprint or journal). Tiers: Famous 6 (8 pape
 
 ## Six to add first
 
+This repo's 14 papers are the famous eight, five of these six, and backpropagation (row 2) as step 01. The sixth, Christiano et al., appears on [the step 09 page](../papers/09-instructgpt/) as the source of RLHF.
+
 | # | Paper | Year | Why it belongs |
 |---|-------|------|----------------|
 | 1 | [ImageNet Classification with Deep CNNs (AlexNet)](https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html), Krizhevsky, Sutskever, Hinton | 2012 | Started the deep learning era: GPUs + big data + deep nets won ImageNet by a wide margin. #8 on Nature's list of the most-cited papers of the 21st century ([U of T](https://gro.utoronto.ca/?p=3548)). |
@@ -76,7 +78,7 @@ Year = first public release (arXiv preprint or journal). Tiers: Famous 6 (8 pape
 
 ## Full timeline with the gaps filled
 
-The famous six are **bold**; must-read additions are marked (must-add).
+The eight famous papers are **bold**, with two rows holding two each; must-read additions are marked (must-add).
 
 | Year | Paper | One-line idea |
 |------|-------|---------------|
@@ -110,7 +112,7 @@ Note: OpenAI's o1 (Sept 2024) started the reasoning model era, but OpenAI releas
 
 ## Landmarks outside the LLM story
 
-The famous six are all language. These made the other half of AI:
+The famous eight are all language. These made the other half of AI:
 
 | Year | Paper | Area | Why |
 |------|-------|------|-----|
@@ -159,4 +161,4 @@ Sources were web searches, publisher pages and an arXiv API check confirming tha
 2. Which non-LLM papers count as landmarks (by citation rank and field impact)?
 3. Which 2024–2026 papers are becoming landmarks?
 
-Ranking evidence: Nature's 2025 analysis of the most-cited 21st-century papers (ResNet #1, Transformer #7, AlexNet #8), Paper Digest influence rankings, and direct citations between papers (for example, InstructGPT citing Christiano 2017). Links point to arXiv or the publisher. The DOI links for the pre-arXiv papers (Turing, backprop, LSTM, LeNet, DQN, AlphaGo, AlphaFold) were not checked one by one. The 2025–2026 section relies on secondary roundups and has medium confidence.
+Ranking evidence: Nature's 2025 analysis of the most-cited 21st-century papers (ResNet #1, Transformer #7, AlexNet #8), Paper Digest influence rankings, and direct citations between papers (for example, InstructGPT citing Christiano 2017). Links point to arXiv or the publisher. On 18 November 2026 every link in this file was checked again: the 34 arXiv links return the papers named, and the seven DOI links for the pre-arXiv papers (Turing, backprop, LSTM, LeNet, DQN, AlphaGo, AlphaFold) resolve to the right titles and years. The 2025–2026 section relies on secondary roundups and has medium confidence.
