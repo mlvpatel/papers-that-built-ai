@@ -24,6 +24,8 @@ else:  # the whole input squeezed into the encoder's last state
 python papers/03-attention/demo.py
 ```
 
+Run time on an Apple M5 Pro: 63 s for a full run on the GPU, 17 s with `--quick` on the CPU.
+
 Two recurrent encoder-decoders, the same network from the same seed, learn to reverse random strings of 4 to 32 letters. Then each reverses 500 new strings at lengths 8, 16 and 32. The score is the share of output characters that are correct.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:

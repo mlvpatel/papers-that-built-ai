@@ -25,6 +25,8 @@ Writing the steps breaks a problem into parts and leaves a trace you can read wh
 python papers/10-chain-of-thought/demo.py
 ```
 
+Run time on an Apple M5 Pro: 69 s for a full run on the GPU.
+
 The first run downloads Qwen2.5-1.5B-Instruct (about 3.1 GB, pinned to one revision so results repeat). The same model answers the same 12 word problems twice: first told to give only the final number, then told to reason step by step and put the answer in `\boxed{}`. The answer keys are computed in code, and decoding is greedy, so a rerun on the same machine prints the same text. The problems were written on 15 November 2026 for this test and not changed after.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:

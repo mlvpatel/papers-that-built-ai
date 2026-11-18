@@ -25,6 +25,8 @@ budget_steps = max(1, round(budget / n))  # smaller models get more steps
 python papers/07-scaling/demo.py
 ```
 
+Run time on an Apple M5 Pro: 106 s for a full run on the GPU, 49 s with `--quick` on the CPU.
+
 The demo trains five widths of the step 06 model on Tiny Shakespeare. First every size gets the same 1,000 steps (Kaplan). Then every size gets the same compute, equal to the 64-wide model's 1,000 steps, so the small models train longer and the big ones shorter (Chinchilla). Lower validation loss is better.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:

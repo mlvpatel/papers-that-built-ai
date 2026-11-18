@@ -24,6 +24,8 @@ The reward model works like a reviewer who has learned the team's taste and can 
 python papers/09-instructgpt/demo.py
 ```
 
+Run time on an Apple M5 Pro: 13 s for a full run on the GPU.
+
 The first run downloads two models (about 6.0 GB together, each pinned to one revision): Pythia-1.4B, trained only to predict the next token, and Qwen2.5-1.5B-Instruct, which was trained to follow instructions. They are two different models from two different labs, trained on different data, so the demo shows the kind of difference instruction training makes, not a controlled measurement of it. No instruction-tuned copy of Pythia's own weights can be downloaded without signing in. The paper's own comparison was controlled: its models share GPT-3's architecture and differ only in the human-feedback training (page 3).
 
 Each instruction has a simple check, written before the first run: the haiku must be 3 lines, the tips exactly 3 numbered or bulleted items, the explanation one or two sentences. Both models get 120 tokens and greedy decoding.

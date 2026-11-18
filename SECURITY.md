@@ -25,4 +25,10 @@ The demos download public data and models: CIFAR-10 through torchvision and thre
 - `main` accepts changes only through pull requests whose CI and CodeQL checks pass. Force pushes and branch deletion are blocked.
 - CodeQL scans the Python code and the workflows on every push, every pull request and once a week.
 - OpenSSF Scorecard checks the repo's supply-chain practices weekly.
+- Each release, built by the `release` workflow from a tag on `main`, attaches the source archive and its build provenance, signed through Sigstore. Check an archive with:
+
+  ```bash
+  gh attestation verify papers-that-built-ai-v1.0.0.tar.gz --repo mlvpatel/papers-that-built-ai
+  ```
+
 - Secret scanning with push protection, Dependabot alerts and Dependabot security updates are on.

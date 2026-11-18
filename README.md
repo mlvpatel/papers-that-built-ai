@@ -132,7 +132,7 @@ flowchart TB
 
 ### Level 3: components of one demo
 
-Every `demo.py` has the same shape, whether it trains a network (Act 1) or prompts an open model (Act 2).
+Every `demo.py` has the same shape, whether it trains a network (Act 1) or prompts an open model (Act 2). Each one is a single file you can read on its own, so small helpers such as the device choice, batching and model loading are copied into every demo on purpose rather than shared.
 
 ```mermaid
 flowchart LR

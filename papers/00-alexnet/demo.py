@@ -68,7 +68,12 @@ def load(smoke):
         return x[:256], y[:256], x[256:], y[256:]
     from torchvision.datasets import CIFAR10
 
-    sets = [CIFAR10(DATA, train=t, download=True) for t in (True, False)]
+    try:
+        sets = [CIFAR10(DATA, train=t, download=True) for t in (True, False)]
+    except OSError as err:  # no network, or the mirror is down
+        raise SystemExit(
+            f"Could not get CIFAR-10 (170 MB, first run only): {err}"
+        ) from err
     out = []
     for s in sets:
         out += [torch.from_numpy(s.data).permute(0, 3, 1, 2), torch.tensor(s.targets)]

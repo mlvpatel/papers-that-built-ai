@@ -24,6 +24,8 @@ The model is GPT-2's design with some sparse attention layers added (page 8), ma
 python papers/08-gpt3/demo.py
 ```
 
+Run time on an Apple M5 Pro: 12 s for a full run on the GPU.
+
 The first run downloads Pythia-1.4B (about 2.9 GB, pinned to one revision so results repeat), a base model trained only to predict the next token on 2020-era web text. It does two small tasks: label a review positive or negative, and rewrite a date as YYYY-MM-DD. Each item is asked twice: with only the task description, then with a few solved examples above it. The model, its weights and the items stay the same; only the prompt changes. An answer counts when the first line of the reply starts with it.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:

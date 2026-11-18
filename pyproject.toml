@@ -1,0 +1,4 @@
+# Settings for ruff, the linter and formatter that CI runs (versions in ci-tools.txt).
+# The repo is not an installable package; install with requirements.txt instead.
+[tool.ruff]
+target-version = "py312"
