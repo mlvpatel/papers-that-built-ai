@@ -100,7 +100,9 @@ def main(argv=None):
     speed.add_argument(
         "--quick", action="store_true", help="400 steps per model, for a CPU"
     )
-    speed.add_argument("--smoke", action="store_true", help="2 steps each, for tests")
+    speed.add_argument(
+        "--smoke", action="store_true", help="2 steps per model, for the tests"
+    )
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",

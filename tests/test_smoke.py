@@ -3,14 +3,10 @@
 Demos are found by folder name, so a new step needs no change here.
 """
 
-import importlib.util
-from pathlib import Path
-
 import pytest
 import torch
-from demo_loader import RESULT
+from demo_loader import RESULT, ROOT, load
 
-ROOT = Path(__file__).resolve().parents[1]
 GPU = (
     "mps"
     if torch.backends.mps.is_available()
@@ -33,9 +29,7 @@ def test_at_least_one_demo_is_found():
     "path", DEMOS, ids=lambda p: p.stem if p.parent.name == "papers" else p.parent.name
 )
 def test_demo_smoke_run_prints_a_result_line(path, device, capsys):
-    spec = importlib.util.spec_from_file_location(f"demo_{path.parent.name}", path)
-    demo = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(demo)
+    demo = load(path)
 
     demo.main(["--smoke", "--device", device])
 

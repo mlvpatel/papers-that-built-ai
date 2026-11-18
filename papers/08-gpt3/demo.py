@@ -95,7 +95,7 @@ def load(device):  # pragma: no cover - downloads a 2.9 GB model, too big for CI
 
 
 @torch.no_grad()
-def complete(tok, model, text, max_new):  # pragma: no cover - needs the model
+def complete(tok, model, text, max_new):
     ids = tok(text, return_tensors="pt").to(model.device)
     out = model.generate(
         **ids, max_new_tokens=max_new, do_sample=False, pad_token_id=tok.eos_token_id
@@ -103,7 +103,7 @@ def complete(tok, model, text, max_new):  # pragma: no cover - needs the model
     return tok.decode(out[0, ids.input_ids.shape[1] :], skip_special_tokens=True)
 
 
-def main(argv=None):  # pragma: no cover - needs the model
+def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(

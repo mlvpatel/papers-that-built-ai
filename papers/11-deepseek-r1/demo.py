@@ -108,7 +108,7 @@ def load(name, revision, device):  # pragma: no cover - 3 GB download, not in CI
 
 
 @torch.no_grad()
-def solve(tok, model, question, max_new, sample):  # pragma: no cover - needs model
+def solve(tok, model, question, max_new, sample):
     chat = [{"role": "user", "content": question + STEPS}]
     text = tok.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
     ids = tok(text, return_tensors="pt").to(model.device)
@@ -123,7 +123,7 @@ def solve(tok, model, question, max_new, sample):  # pragma: no cover - needs mo
     return tok.decode(new, skip_special_tokens=True), len(new)
 
 
-def run(label, name, revision, device, max_new, sample):  # pragma: no cover
+def run(label, name, revision, device, max_new, sample):
     tok, model = load(name, revision, device)
     torch.manual_seed(0)
     right, tokens, replies, t0 = 0, 0, [], time.time()
@@ -152,7 +152,7 @@ def run(label, name, revision, device, max_new, sample):  # pragma: no cover
     return right, tokens, replies
 
 
-def main(argv=None):  # pragma: no cover - needs the models
+def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
