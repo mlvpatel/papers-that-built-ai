@@ -79,7 +79,7 @@ def neighbours(vectors, itos, stoi, word, k=5):
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     speed = p.add_mutually_exclusive_group()
-    speed.add_argument("--quick", action="store_true", help="1000 steps, for a CPU")
+    speed.add_argument("--quick", action="store_true", help="1,000 steps, for a CPU")
     speed.add_argument("--smoke", action="store_true", help="2 steps, for the tests")
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(

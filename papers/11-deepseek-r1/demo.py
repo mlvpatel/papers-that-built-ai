@@ -73,7 +73,11 @@ PROBLEMS = [
 
 
 def number(text):
-    """The last \\boxed{} answer in a reply, else the last number in it."""
+    """The last \\boxed{} answer in a reply, else the last number in it.
+
+    A box with braces inside, like \\boxed{\\frac{1}{2}}, is not read; the last number
+    in the reply is used instead. Every answer key here is a whole number.
+    """
     boxed = re.findall(r"\\boxed\{([^{}]*)\}", text)
     found = re.findall(r"-?\d[\d,]*(?:\.\d+)?", boxed[-1] if boxed else text)
     return float(found[-1].replace(",", "")) if found else None
@@ -93,7 +97,10 @@ def load(name, revision, device):  # pragma: no cover - 3 GB download, not in CI
     try:  # the first run downloads the model
         tok = AutoTokenizer.from_pretrained(name, revision=revision)
         model = AutoModelForCausalLM.from_pretrained(
-            name, revision=revision, dtype=torch.bfloat16
+            name,
+            revision=revision,
+            dtype=torch.bfloat16,
+            use_safetensors=True,  # never unpickle downloaded weights
         )
     except OSError as err:  # no network, the Hub is down, or the disk is full
         raise SystemExit(f"Could not load {name}: {err}") from err
