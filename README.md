@@ -65,14 +65,14 @@ The repo is described at three [C4](https://c4model.com/) levels: who uses it an
 ```mermaid
 flowchart TB
     accTitle: System context of Papers That Built Modern AI
-    accDescr: A reader reads the pages and runs the demos. The repo trains and runs models on PyTorch, downloads models from the Hugging Face Hub and images from a CIFAR-10 mirror, and links each step to the original papers. GitHub Actions tests every commit.
+    accDescr: A reader reads the pages and runs the demos. The repo trains and runs models on PyTorch, downloads models from the Hugging Face Hub and images from a CIFAR-10 mirror, and links each step to the original papers. GitHub Actions tests every commit and builds signed releases from tags.
     reader(["<b>Reader</b><br/>[Person]<br/>Reads a step, runs its demo"])
     repo["<b>Papers That Built Modern AI</b><br/>[Software system]<br/>12 steps, 14 papers, 13 runnable demos"]
     torch["<b>PyTorch</b><br/>[External library]<br/>Tensors, autograd, mps / cuda / cpu"]
     hf["<b>Hugging Face Hub</b><br/>[External system]<br/>Three open models for Act 2"]
     cifar["<b>CIFAR-10 mirror</b><br/>[External system]<br/>Images for step 00, via torchvision"]
     papers["<b>arXiv, NeurIPS, Nature, OpenAI</b><br/>[External systems]<br/>The original paper PDFs"]
-    ci["<b>GitHub Actions</b><br/>[External system]<br/>Lint and smoke tests on every push"]
+    ci["<b>GitHub Actions</b><br/>[External system]<br/>Lint, tests and CodeQL on every push<br/>Signed releases from tags"]
 
     reader -- "reads pages, runs demos" --> repo
     repo -- "trains and runs models on" --> torch

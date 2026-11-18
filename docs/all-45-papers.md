@@ -61,7 +61,7 @@ Year = first public release (arXiv preprint or journal). Tiers: Famous 6 (8 pape
 
 ---
 
-## Six to add first: the famous 6 plus 6 make 12
+## Six to add first
 
 | # | Paper | Year | Why it belongs |
 |---|-------|------|----------------|
