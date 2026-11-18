@@ -21,7 +21,7 @@ The demos download public data and models: CIFAR-10 through torchvision and thre
   uv pip compile requirements.txt ci-tools.txt -c constraints.txt --override cpu.txt --generate-hashes --python-version 3.12 --python-platform x86_64-manylinux_2_28 --index-url https://pypi.org/simple --extra-index-url https://download.pytorch.org/whl/cpu --index-strategy unsafe-best-match --no-header --emit-index-url
   ```
 
-  where `ci-tools.txt` lists pytest, pytest-cov and ruff, and `cpu.txt` pins the `+cpu` builds of torch and torchvision.
+  where `ci-tools.txt` (repo root) pins pytest, pytest-cov, ruff and their test dependencies, and `cpu.txt` pins the `+cpu` builds of torch and torchvision.
 - `main` accepts changes only through pull requests whose CI and CodeQL checks pass. Force pushes and branch deletion are blocked.
 - CodeQL scans the Python code and the workflows on every push, every pull request and once a week.
 - OpenSSF Scorecard checks the repo's supply-chain practices weekly.

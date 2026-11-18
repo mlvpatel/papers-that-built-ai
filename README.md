@@ -79,7 +79,7 @@ flowchart TB
 
     classDef person fill:#08427B,stroke:#052E56,color:#fff
     classDef system fill:#1168BD,stroke:#0B4884,color:#fff
-    classDef external fill:#999999,stroke:#6B6B6B,color:#fff
+    classDef external fill:#999999,stroke:#6B6B6B,color:#000
     class reader person
     class repo system
     class torch,hf,cifar,papers,ci external
@@ -119,8 +119,8 @@ flowchart TB
     ci -- "runs" --> tests
 
     classDef person fill:#08427B,stroke:#052E56,color:#fff
-    classDef container fill:#438DD5,stroke:#2E6295,color:#fff
-    classDef external fill:#999999,stroke:#6B6B6B,color:#fff
+    classDef container fill:#438DD5,stroke:#2E6295,color:#000
+    classDef external fill:#999999,stroke:#6B6B6B,color:#000
     class reader person
     class pages,act1,gpt,act2,data,docs,tests container
     class hf,cifar,ci external
@@ -155,7 +155,7 @@ flowchart LR
 
     classDef person fill:#08427B,stroke:#052E56,color:#fff
     classDef component fill:#85BBF0,stroke:#5D82A8,color:#000
-    classDef container fill:#438DD5,stroke:#2E6295,color:#fff
+    classDef container fill:#438DD5,stroke:#2E6295,color:#000
     class reader person
     class cli,input,before,after,score,result component
     class tests container

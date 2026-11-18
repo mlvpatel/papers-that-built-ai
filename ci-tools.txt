@@ -1,0 +1,8 @@
+# Test and lint tools for CI and local development, at the versions CI runs.
+# Install locally with: pip install -r ci-tools.txt
+pytest==9.2.0
+pytest-cov==7.1.0
+ruff==0.17.5
+coverage==7.17.3
+iniconfig==2.3.1
+pluggy==1.7.0
