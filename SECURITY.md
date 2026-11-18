@@ -8,7 +8,7 @@ Include the file or workflow affected, what an attacker could do, and the steps 
 
 ## Scope
 
-Only the `main` branch is supported. In scope are the demos under `papers/`, the tests, the GitHub Actions workflows under `.github/workflows/`, and the dependency pins in `requirements.txt` and `constraints.txt`.
+Only the `main` branch is supported. In scope are the demos under `papers/`, the tests, the GitHub Actions workflows under `.github/workflows/`, and the dependency pins in `requirements.txt` and `constraints.txt`, plus the files that decide what CI installs: `requirements-ci.txt`, `ci-tools.txt` and `cpu.txt`.
 
 The demos download public data and models: CIFAR-10 through torchvision and three open models from the Hugging Face Hub, each pinned to one revision. A problem in those upstream projects belongs with them, but a way this repo fetches or loads them unsafely is in scope.
 

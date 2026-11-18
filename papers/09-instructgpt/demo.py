@@ -75,7 +75,7 @@ def load(name, revision, device):  # pragma: no cover - 3 GB download, not in CI
 
 
 @torch.no_grad()
-def reply(tok, model, instruction, chat):  # pragma: no cover - needs the model
+def reply(tok, model, instruction, chat):
     if chat:  # the instruct model expects its chat format
         messages = [{"role": "user", "content": instruction}]
         text = tok.apply_chat_template(
@@ -91,7 +91,7 @@ def reply(tok, model, instruction, chat):  # pragma: no cover - needs the model
     return new.strip()
 
 
-def answers(name, revision, device, chat):  # pragma: no cover - needs the model
+def answers(name, revision, device, chat):
     tok, model = load(name, revision, device)
     result = [reply(tok, model, instruction, chat) for instruction, _ in INSTRUCTIONS]
     del model
@@ -102,7 +102,7 @@ def answers(name, revision, device, chat):  # pragma: no cover - needs the model
     return result
 
 
-def main(argv=None):  # pragma: no cover - needs the models
+def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(

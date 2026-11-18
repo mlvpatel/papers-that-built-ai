@@ -2,7 +2,7 @@
 
 # Papers That Built Modern AI
 
-14 landmark papers from 1986 to 2025, each with a short page and a demo you run on your own machine.
+14 landmark papers from 1986 to 2025, in 12 steps that each have a short page and a demo you run on your own machine.
 
 [![CI](https://github.com/mlvpatel/papers-that-built-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/mlvpatel/papers-that-built-ai/actions/workflows/ci.yml)
 ![Python 3.12](https://img.shields.io/badge/python-3.12-3776AB)
@@ -16,7 +16,7 @@
 
 </div>
 
-You know these 6 papers: Word2Vec, the Transformer, GPT-1 and BERT, the scaling laws and GPT-3, InstructGPT, and Chain of Thought. Here are the 6 around them that nobody tells you about, and the code that shows why each one had to exist.
+You know these 8 papers: Word2Vec, the Transformer, GPT-1, BERT, the scaling laws, GPT-3, InstructGPT and Chain of Thought. Here are the 6 around them that nobody tells you about, and the code that shows why each one had to exist.
 
 ```mermaid
 flowchart LR
@@ -35,6 +35,8 @@ Act 1 trains small models from scratch. Act 2 runs three small open models. Each
 
 ## The 14 papers
 
+Twelve steps, numbered 00 to 11. Steps 06 and 07 each cover two papers, so the table has 14 rows.
+
 | Step | Year | Paper | Authors | What it made possible |
 |---|---|---|---|---|
 | [00](papers/00-alexnet/) | 2012 | [ImageNet Classification with Deep Convolutional Neural Networks](https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html) (AlexNet) | Krizhevsky, Sutskever, Hinton. NeurIPS | A network learns its own image filters on GPUs. ImageNet top-5 error fell from 25.7% to 17.0% |
@@ -43,7 +45,8 @@ Act 1 trains small models from scratch. Act 2 runs three small open models. Each
 | [03](papers/03-attention/) | 2014 | [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473) | Bahdanau, Cho, Bengio. ICLR 2015 | The decoder looks back at every input word with learned weights, instead of one fixed-length summary |
 | [04](papers/04-transformer/) | 2017 | [Attention Is All You Need](https://arxiv.org/abs/1706.03762) (Transformer) | Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin. Google, NeurIPS | Self-attention replaces recurrence, so every position reaches every other in one step and training runs in parallel |
 | [05](papers/05-resnet/) | 2015 | [Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385) (ResNet) | He, Zhang, Ren, Sun. Microsoft Research | Skip connections let a 152-layer network train. Adding depth made models better instead of worse |
-| [06](papers/06-pretraining/) | 2018 | [Improving Language Understanding by Generative Pre-Training](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) (GPT-1) and [BERT](https://arxiv.org/abs/1810.04805) | Radford, Narasimhan, Salimans, Sutskever. OpenAI. Devlin, Chang, Lee, Toutanova. Google | Learn the language from unlabeled text first, then the task. GPT-1 scored 74.7 with pre-training and 59.9 without |
+| [06](papers/06-pretraining/) | 2018 | [Improving Language Understanding by Generative Pre-Training](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) (GPT-1) | Radford, Narasimhan, Salimans, Sutskever. OpenAI | Learn the language from unlabeled text first, then the task. GPT-1 scored 74.7 with pre-training and 59.9 without |
+| [06](papers/06-pretraining/) | 2018 | [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805) | Devlin, Chang, Lee, Toutanova. Google | The same recipe with a different pre-training task: hide some words and predict them from both sides, where GPT-1 reads only left to right |
 | [07](papers/07-scaling/) | 2020 | [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) | Kaplan et al. OpenAI | Loss falls along a power law as parameters, data and compute grow, so a big run can be predicted from small ones |
 | [07](papers/07-scaling/) | 2022 | [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) (Chinchilla) | Hoffmann et al. DeepMind | For a fixed budget, grow model size and training data in equal proportion. A 70B model beat the 280B Gopher |
 | [08](papers/08-gpt3/) | 2020 | [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) (GPT-3) | Brown et al. OpenAI | A 175B model picks up a task from examples in the prompt, with no weight updates |

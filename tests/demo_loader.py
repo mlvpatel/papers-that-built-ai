@@ -10,10 +10,13 @@ RESULT = re.compile(
 )
 
 
-def load(folder):
-    """Import papers/<folder>/demo.py; papers/ is not a package."""
-    path = ROOT / "papers" / folder / "demo.py"
-    spec = importlib.util.spec_from_file_location(f"demo_{folder}", path)
+def load(where):
+    """Import a demo by folder name (papers/<where>/demo.py) or by its path.
+
+    papers/ is not a package, so demos are loaded from their files.
+    """
+    path = where if isinstance(where, Path) else ROOT / "papers" / where / "demo.py"
+    spec = importlib.util.spec_from_file_location(f"demo_{path.parent.name}", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module

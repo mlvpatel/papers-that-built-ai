@@ -132,7 +132,11 @@ def main(argv=None):
     speed.add_argument(
         "--quick", action="store_true", help="4 epochs per model, for a CPU"
     )
-    speed.add_argument("--smoke", action="store_true", help="random images, for tests")
+    speed.add_argument(
+        "--smoke",
+        action="store_true",
+        help="1 epoch per model on random images, for the tests",
+    )
     devices = [d for d, ok in GPUS if ok] + ["cpu"]  # the ones this machine has
     p.add_argument(
         "--device",
