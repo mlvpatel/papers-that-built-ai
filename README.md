@@ -2,6 +2,7 @@
 
 # Papers That Built Modern AI
 
+How today's AI was built, one research paper at a time.<br/>
 14 landmark papers from 1986 to 2025, in 12 steps that each have a short page and a demo you run on your own machine.
 
 [![CI](https://github.com/mlvpatel/papers-that-built-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/mlvpatel/papers-that-built-ai/actions/workflows/ci.yml)
@@ -10,163 +11,174 @@
 [![Code: MIT](https://img.shields.io/badge/code-MIT-2EA44F)](LICENSE)
 [![Pages: CC BY 4.0](https://img.shields.io/badge/pages-CC%20BY%204.0-lightgrey)](LICENSE-CONTENT)
 
-[The papers](#the-14-papers) · [Architecture](#architecture-c4-model) · [The math](#the-math-behind-each-step) · [Run it](#run-it) · [Results](#results)
+**14 papers · 12 steps · 13 runnable demos · every paper number cited to its page**
+
+[What this is](#what-this-is) · [Pick your path](#pick-your-path) · [The story](#the-story-in-12-steps) · [The 14 papers](#the-14-papers) · [Results](#results) · [Run it](#run-it) · [The math](#the-math-behind-each-step) · [Glossary](#glossary)
 
 **[Start here: 00 AlexNet](papers/00-alexnet/)**
 
 </div>
 
-You know these 8 papers: Word2Vec, the Transformer, GPT-1, BERT, the scaling laws, GPT-3, InstructGPT and Chain of Thought. Here are the 6 around them that nobody tells you about, and the code that shows why each one had to exist.
+## What this is
+
+The chatbots, photo apps and coding assistants of today run on ideas that were first published as research papers. This repo takes 14 of those papers and gives each one two things:
+
+- **A short page** in plain words: what was broken before the paper, the one idea that fixed it, the numbers the paper itself reported, and what broke next.
+- **A small program** that runs the same experiment twice, once without the paper's idea and once with it, and prints a score for each. You see the problem and the fix on your own computer.
+
+You may know eight of these papers by name: Word2Vec, the Transformer, GPT-1, BERT, the scaling laws, GPT-3, InstructGPT and Chain of Thought. The other six are the ones around them that rarely make the list: AlexNet, backpropagation, attention (Bahdanau et al.), ResNet, Chinchilla and DeepSeek-R1.
+
+## Pick your path
+
+| If you are | Start with | You need |
+|---|---|---|
+| New to AI, and you don't write code | [The story in 12 steps](#the-story-in-12-steps) below, then the first two sections of any step page, "What was broken" and "The idea". The [glossary](#glossary) explains the terms. | A web browser |
+| Comfortable running commands in a terminal | [Run it](#run-it): install once, run any step, and compare the before and after it prints with the [results](#results) | Python 3.12 and a laptop; 16 GB of memory for Act 2 |
+| Working in machine learning | [The math](#the-math-behind-each-step), [annotated_gpt.py](papers/annotated_gpt.py), and "The paper's numbers" on each page, cited by table, figure and page | The papers, linked in the [reading list](docs/reading-list.md) |
+
+Every step page has the same five parts: what was broken, the idea, run it, the paper's numbers, and what broke next.
+
+## The story in 12 steps
 
 ```mermaid
-flowchart LR
+flowchart TB
+    accTitle: The 12 steps in order
+    accDescr: Act 1, steps 00 to 07, trains small models on a laptop: AlexNet 2012, backpropagation 1986, Word2Vec 2013, attention 2014, the Transformer 2017, ResNet 2015, GPT-1 and BERT 2018, and the scaling laws and Chinchilla 2020 and 2022. Act 2, steps 08 to 11, runs open models: GPT-3 2020, InstructGPT 2022, Chain of Thought 2022 and DeepSeek-R1 2025.
     subgraph act1 ["Act 1: run it on a laptop"]
-        direction LR
-        A00["00 AlexNet<br/>2012"] --> A01["01 Backprop<br/>1986"] --> A02["02 Word2Vec<br/>2013"] --> A03["03 Attention<br/>2014"] --> A04["04 Transformer<br/>2017"] --> A05["05 ResNet<br/>2015"] --> A06["06 GPT-1 + BERT<br/>2018"] --> A07["07 Scaling laws<br/>+ Chinchilla<br/>2020, 2022"]
+        direction TB
+        subgraph row1 [" "]
+            direction LR
+            A00["00 AlexNet<br/>2012"] --> A01["01 Backprop<br/>1986"] --> A02["02 Word2Vec<br/>2013"] --> A03["03 Attention<br/>2014"]
+        end
+        subgraph row2 [" "]
+            direction LR
+            A04["04 Transformer<br/>2017"] --> A05["05 ResNet<br/>2015"] --> A06["06 GPT-1 + BERT<br/>2018"] --> A07["07 Scaling laws<br/>+ Chinchilla<br/>2020, 2022"]
+        end
+        row1 --> row2
     end
     subgraph act2 ["Act 2: what made it talk"]
         direction LR
         B08["08 GPT-3<br/>2020"] --> B09["09 InstructGPT<br/>2022"] --> B10["10 Chain of Thought<br/>2022"] --> B11["11 DeepSeek-R1<br/>2025"]
     end
-    A07 --> B08
+    act1 --> act2
 ```
 
-Act 1 trains small models from scratch. Act 2 runs three small open models. Each step is one folder with a page in the same five parts (what was broken, the idea, run it, the paper's own numbers, what broke next) and one file you can run. Every demo prints a before and an after that differ in the paper's one idea, so you see the problem and the fix on your own machine.
+The steps are numbered 00 to 11, so there are 12 of them, and steps 06 and 07 each cover two papers: 14 papers in all. They follow the order in which the ideas build on each other, not the order they were published. Step 00 starts with the 2012 result that began the deep learning era, and step 01 goes back to 1986 for how such a network learns at all. ResNet (2015) comes after the Transformer (2017) because the demo needs its fix only once the model gets deep.
+
+### Act 1: the building blocks
+
+Small models trained from scratch on your own computer: photos for step 00, four points for step 01, and the plays of Shakespeare for the rest.
+
+| Step | Before this paper | The idea | What the demo shows |
+|---|---|---|---|
+| [00 AlexNet](papers/00-alexnet/), 2012 | A plain network reads a photo as one long list of pixels, so it has to learn an edge separately for every spot it could appear in. | Slide small learned filters across the image, so a pattern learned once is found anywhere. Train on GPUs. | Test photos labeled right: 52% → 74% |
+| [01 Backpropagation](papers/01-backprop/), 1986 | A hidden layer lets a network solve harder problems, but nobody had a reliable way to train it. | Measure the error at the output and send it backwards, layer by layer, to work out how each weight should change. | XOR, which no straight line can split: 2 of 4 points right → 4 of 4 |
+| [02 Word2Vec](papers/02-word2vec/), 2013 | To a computer a word was an ID number, with no sense that *king* and *queen* are related. | Learn a list of numbers for each word by predicting its neighbours, so words used in similar places end up close. | Related pairs such as day and night, compared with random pairs: -0.02 → 0.26, where 0 is chance |
+| [03 Attention](papers/03-attention/), 2014 | Translation models squeezed a whole sentence into one fixed-size summary first, so long sentences lost detail. | While writing each output word, look back at every input word and weigh which ones matter. | Reversing 32-letter strings, letters right: 26% → 94% |
+| [04 Transformer](papers/04-transformer/), 2017 | Language models read text one position at a time, so training could not run in parallel. | Drop the one-at-a-time reading. Every position looks at every other one at once, through attention. | Time for the same 1,500 training steps: 29 s → 12 s, at slightly lower quality per step at this tiny size |
+| [05 ResNet](papers/05-resnet/), 2015 | Past a certain depth, adding layers made a network train worse, not better. | Each block adds a small change to its input instead of replacing it. This is the skip connection. | A 24-block model's loss, where lower is better: 3.36 → 1.67 |
+| [06 GPT-1 and BERT](papers/06-pretraining/), 2018 | Each task needed its own examples labeled by people, and every model started out knowing nothing. | First let the model learn the language from plain text, then teach it the task. | Telling a real Shakespeare line from the same words shuffled: 60% → 91%, where 50% is chance |
+| [07 Scaling laws and Chinchilla](papers/07-scaling/), 2020 and 2022 | Nobody could say in advance how big a model should be or how much text it should read. | Measure it: loss falls along a predictable curve as models grow. Chinchilla adds that a fixed budget should grow model and data together. | Same training steps: loss 2.21 → 1.66 from smallest to largest model. Same budget: the biggest model no longer wins |
+
+### Act 2: what made it talk
+
+Three small open language models, downloaded once (9.6 GB). Each step asks the same questions twice, without and with the paper's idea.
+
+| Step | Before this paper | The idea | What the demo shows |
+|---|---|---|---|
+| [08 GPT-3](papers/08-gpt3/), 2020 | Every new task meant training the model again on thousands of labeled examples. | Put a few solved examples in the prompt. A large enough model picks up the task with no retraining. | Items right: 3 of 16 with no examples → 16 of 16 with a few |
+| [09 InstructGPT](papers/09-instructgpt/), 2022 | A model trained to continue web text often ignores the instruction or makes things up. | People rank the model's answers, a reward model learns their preferences, and the model is trained to score well with it. | Instructions followed: 0 of 3 for a base model → 3 of 3 for an instruction-trained one |
+| [10 Chain of Thought](papers/10-chain-of-thought/), 2022 | Models answered multi-step problems in one go, with every step done silently. | Have the model write out its working before the answer. | Math word problems right: 2 of 12 → 11 of 12 |
+| [11 DeepSeek-R1](papers/11-deepseek-r1/), 2025 | Teaching a model to reason needed many worked examples written by people. | Reward only answers a rule can check, and let the model find its own way to reason. | Competition problems right: 3 of 4 → 4 of 4, using about four times the tokens |
 
 ## The 14 papers
 
-Twelve steps, numbered 00 to 11. Steps 06 and 07 each cover two papers, so the table has 14 rows.
+Twelve steps, numbered 00 to 11, cover 14 papers, because steps 06 and 07 each cover two. The first column counts the papers.
 
-| Step | Year | Paper | Authors | What it made possible |
-|---|---|---|---|---|
-| [00](papers/00-alexnet/) | 2012 | [ImageNet Classification with Deep Convolutional Neural Networks](https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html) (AlexNet) | Krizhevsky, Sutskever, Hinton. NeurIPS | A network learns its own image filters on GPUs. ImageNet top-5 error fell from 25.7% to 17.0% |
-| [01](papers/01-backprop/) | 1986 | [Learning representations by back-propagating errors](https://doi.org/10.1038/323533a0) | Rumelhart, Hinton, Williams. Nature | The output error flows back through every layer, so hidden units learn their own features. Every model in this repo was trained this way |
-| [02](papers/02-word2vec/) | 2013 | [Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/abs/1301.3781) (Word2Vec) | Mikolov, Chen, Corrado, Dean. Google | Words become vectors learned from raw text, and vector arithmetic answers analogies: King − Man + Woman ≈ Queen |
-| [03](papers/03-attention/) | 2014 | [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473) | Bahdanau, Cho, Bengio. ICLR 2015 | The decoder looks back at every input word with learned weights, instead of one fixed-length summary |
-| [04](papers/04-transformer/) | 2017 | [Attention Is All You Need](https://arxiv.org/abs/1706.03762) (Transformer) | Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin. Google, NeurIPS | Self-attention replaces recurrence, so every position reaches every other in one step and training runs in parallel |
-| [05](papers/05-resnet/) | 2015 | [Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385) (ResNet) | He, Zhang, Ren, Sun. Microsoft Research | Skip connections let a 152-layer network train. Adding depth made models better instead of worse |
-| [06](papers/06-pretraining/) | 2018 | [Improving Language Understanding by Generative Pre-Training](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) (GPT-1) | Radford, Narasimhan, Salimans, Sutskever. OpenAI | Learn the language from unlabeled text first, then the task. GPT-1 scored 74.7 with pre-training and 59.9 without |
-| [06](papers/06-pretraining/) | 2018 | [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805) | Devlin, Chang, Lee, Toutanova. Google | The same recipe with a different pre-training task: hide some words and predict them from both sides, where GPT-1 reads only left to right |
-| [07](papers/07-scaling/) | 2020 | [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) | Kaplan et al. OpenAI | Loss falls along a power law as parameters, data and compute grow, so a big run can be predicted from small ones |
-| [07](papers/07-scaling/) | 2022 | [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) (Chinchilla) | Hoffmann et al. DeepMind | For a fixed budget, grow model size and training data in equal proportion. A 70B model beat the 280B Gopher |
-| [08](papers/08-gpt3/) | 2020 | [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) (GPT-3) | Brown et al. OpenAI | A 175B model picks up a task from examples in the prompt, with no weight updates |
-| [09](papers/09-instructgpt/) | 2022 | [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) (InstructGPT) | Ouyang et al. OpenAI | A reward model learned from human rankings steers the model. People preferred the 1.3B InstructGPT to the 175B GPT-3 |
-| [10](papers/10-chain-of-thought/) | 2022 | [Chain-of-Thought Prompting Elicits Reasoning in Large Language Models](https://arxiv.org/abs/2201.11903) | Wei et al. Google | Writing the steps before the answer took PaLM 540B from 18% to 57% on grade-school math |
-| [11](papers/11-deepseek-r1/) | 2025 | [DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning](https://arxiv.org/abs/2501.12948) | DeepSeek-AI | Reinforcement learning on answers a rule can check teaches long reasoning with no human-written traces |
+| # | Step | Year | Paper | Authors | What it made possible |
+|---|---|---|---|---|---|
+| 1 | [00](papers/00-alexnet/) | 2012 | [ImageNet Classification with Deep Convolutional Neural Networks](https://papers.nips.cc/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html) (AlexNet) | Krizhevsky, Sutskever, Hinton. NeurIPS | A network learns its own image filters on GPUs. ImageNet top-5 error fell from 25.7% to 17.0% |
+| 2 | [01](papers/01-backprop/) | 1986 | [Learning representations by back-propagating errors](https://doi.org/10.1038/323533a0) | Rumelhart, Hinton, Williams. Nature | The output error flows back through every layer, so hidden units learn their own features. Every model in this repo was trained this way |
+| 3 | [02](papers/02-word2vec/) | 2013 | [Efficient Estimation of Word Representations in Vector Space](https://arxiv.org/abs/1301.3781) (Word2Vec) | Mikolov, Chen, Corrado, Dean. Google | Words become vectors learned from raw text, and vector arithmetic answers analogies: King − Man + Woman ≈ Queen |
+| 4 | [03](papers/03-attention/) | 2014 | [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/abs/1409.0473) | Bahdanau, Cho, Bengio. ICLR 2015 | The decoder looks back at every input word with learned weights, instead of one fixed-length summary |
+| 5 | [04](papers/04-transformer/) | 2017 | [Attention Is All You Need](https://arxiv.org/abs/1706.03762) (Transformer) | Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, Polosukhin. Google, NeurIPS | Self-attention replaces recurrence, so every position reaches every other in one step and training runs in parallel |
+| 6 | [05](papers/05-resnet/) | 2015 | [Deep Residual Learning for Image Recognition](https://arxiv.org/abs/1512.03385) (ResNet) | He, Zhang, Ren, Sun. Microsoft Research | Skip connections let a 152-layer network train. Adding depth made models better instead of worse |
+| 7 | [06](papers/06-pretraining/) | 2018 | [Improving Language Understanding by Generative Pre-Training](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) (GPT-1) | Radford, Narasimhan, Salimans, Sutskever. OpenAI | Learn the language from unlabeled text first, then the task. GPT-1 scored 74.7 with pre-training and 59.9 without |
+| 8 | [06](papers/06-pretraining/) | 2018 | [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805) | Devlin, Chang, Lee, Toutanova. Google | The same recipe with a different pre-training task: hide some words and predict them from both sides, where GPT-1 reads only left to right |
+| 9 | [07](papers/07-scaling/) | 2020 | [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) | Kaplan et al. OpenAI | Loss falls along a power law as parameters, data and compute grow, so a big run can be predicted from small ones |
+| 10 | [07](papers/07-scaling/) | 2022 | [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) (Chinchilla) | Hoffmann et al. DeepMind | For a fixed budget, grow model size and training data in equal proportion. A 70B model beat the 280B Gopher |
+| 11 | [08](papers/08-gpt3/) | 2020 | [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) (GPT-3) | Brown et al. OpenAI | A 175B model picks up a task from examples in the prompt, with no weight updates |
+| 12 | [09](papers/09-instructgpt/) | 2022 | [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) (InstructGPT) | Ouyang et al. OpenAI | A reward model learned from human rankings steers the model. People preferred the 1.3B InstructGPT to the 175B GPT-3 |
+| 13 | [10](papers/10-chain-of-thought/) | 2022 | [Chain-of-Thought Prompting Elicits Reasoning in Large Language Models](https://arxiv.org/abs/2201.11903) | Wei et al. Google | Writing the steps before the answer took PaLM 540B from 18% to 57% on grade-school math |
+| 14 | [11](papers/11-deepseek-r1/) | 2025 | [DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning](https://arxiv.org/abs/2501.12948) | DeepSeek-AI | Reinforcement learning on answers a rule can check teaches long reasoning with no human-written traces |
 
 Every number above comes from the paper and is cited with its table or page on the step's page. PDF links for all 14 are in the [reading list](docs/reading-list.md), and the [full list of 45 papers](docs/all-45-papers.md) covers the ones this repo leaves out.
 
-## Architecture (C4 model)
+## Results
 
-The repo is described at three [C4](https://c4model.com/) levels: who uses it and what it depends on, what it is made of, and what is inside one demo.
+Measured on an Apple M5 Pro (48 GB), 16 November 2026. Lower loss is better; for accuracy and the counts in Act 2, higher is better. Each page shows the full output.
 
-### Level 1: system context
+### Act 1: small models trained from scratch
 
-```mermaid
-flowchart TB
-    accTitle: System context of Papers That Built Modern AI
-    accDescr: A reader reads the pages and runs the demos. The repo trains and runs models on PyTorch, downloads models from the Hugging Face Hub and images from a CIFAR-10 mirror, and links each step to the original papers. GitHub Actions tests every commit and builds signed releases from tags.
-    reader(["<b>Reader</b><br/>[Person]<br/>Reads a step, runs its demo"])
-    repo["<b>Papers That Built Modern AI</b><br/>[Software system]<br/>12 steps, 14 papers, 13 runnable demos"]
-    torch["<b>PyTorch</b><br/>[External library]<br/>Tensors, autograd, mps / cuda / cpu"]
-    hf["<b>Hugging Face Hub</b><br/>[External system]<br/>Three open models for Act 2"]
-    cifar["<b>CIFAR-10 mirror</b><br/>[External system]<br/>Images for step 00, via torchvision"]
-    papers["<b>arXiv, NeurIPS, Nature, OpenAI</b><br/>[External systems]<br/>The original paper PDFs"]
-    ci["<b>GitHub Actions</b><br/>[External system]<br/>Lint, tests and CodeQL on every push<br/>Signed releases from tags"]
+| Step | Before → after | Full run, GPU | `--quick`, CPU |
+|---|---|---|---|
+| [00 AlexNet](papers/00-alexnet/) | Test accuracy 52.2% → 74.4% | 40 s | 76 s |
+| [01 Backprop](papers/01-backprop/) | XOR solved 50% → 100% | 1 s (CPU) | same run |
+| [02 Word2Vec](papers/02-word2vec/) | Pair score -0.016 → 0.258 | 12 s | 3 s |
+| [03 Attention](papers/03-attention/) | Characters right at length 32: 26.0% → 94.2% | 63 s | 17 s |
+| [04 Transformer](papers/04-transformer/) | Loss 1.61 → 1.72, training 29 s → 12 s | 42 s | 13 s |
+| [05 ResNet](papers/05-resnet/) | Loss of a 24-block model 3.36 → 1.67 | 151 s | 106 s |
+| [06 Pre-training](papers/06-pretraining/) | Picks the real line 59.8% → 91.4% | 84 s | 41 s |
+| [07 Scaling](papers/07-scaling/) | Loss 2.21 → 1.66 as size grows | 106 s | 49 s |
+| [annotated_gpt.py](papers/annotated_gpt.py) | Held-out loss 4.195 → 1.794 | 54 s | 35 s |
 
-    reader -- "reads pages, runs demos" --> repo
-    repo -- "trains and runs models on" --> torch
-    repo -- "downloads models from" --> hf
-    repo -- "downloads images from" --> cifar
-    repo -- "links each step to" --> papers
-    ci -- "tests every commit of" --> repo
+Step 04's Transformer is slightly worse after the same number of steps but trains more than twice as fast; its page explains why that speed was the paper's argument. GPU runs are not bit-for-bit repeatable, so steps 03, 05 and 06 and annotated_gpt.py can land a little differently each time. The `--quick` CPU runs repeated exactly when re-run.
 
-    classDef person fill:#08427B,stroke:#052E56,color:#fff
-    classDef system fill:#1168BD,stroke:#0B4884,color:#fff
-    classDef external fill:#999999,stroke:#6B6B6B,color:#000
-    class reader person
-    class repo system
-    class torch,hf,cifar,papers,ci external
+### Act 2: small open models
+
+| Step | Before → after | Full run, GPU |
+|---|---|---|
+| [08 GPT-3](papers/08-gpt3/) | Items right, no examples → a few examples: 3/16 → 16/16 | 12 s |
+| [09 InstructGPT](papers/09-instructgpt/) | Checks passed, Pythia → Qwen Instruct: 0/3 → 3/3 | 13 s |
+| [10 Chain of Thought](papers/10-chain-of-thought/) | Problems right, answer at once → step by step: 2/12 → 11/12 | 69 s |
+| [11 DeepSeek-R1](papers/11-deepseek-r1/) | Problems right, Qwen step by step → R1-distill: 3/4 → 4/4 | 271 s |
+
+## Run it
+
+You need Python 3.12. Act 1 runs from the repo alone, apart from CIFAR-10 for step 00 (about 170 MB). Act 2 downloads 9.6 GB of models on first use. From a clone of this repo:
+
+```bash
+python3.12 -m venv .venv
 ```
 
-### Level 2: containers
-
-```mermaid
-flowchart TB
-    accTitle: Containers inside the repo
-    accDescr: The repo holds step pages, Act 1 demos, annotated_gpt.py, Act 2 demos, Tiny Shakespeare, reading lists and tests. The reader reads the pages and runs both acts. Act 1 and annotated_gpt.py read Tiny Shakespeare, step 00 downloads CIFAR-10, and Act 2 downloads models from the Hugging Face Hub. The tests run Act 1 and run Act 2 with tiny models, and GitHub Actions runs the tests.
-    reader(["<b>Reader</b><br/>[Person]"])
-    subgraph repo ["Papers That Built Modern AI"]
-        direction TB
-        pages["<b>Step pages</b><br/>[Markdown]<br/>papers/NN-*/README.md<br/>problem, idea, run it, paper's numbers, what broke next"]
-        act1["<b>Act 1 demos</b><br/>[Python, PyTorch]<br/>papers/00 to 07/demo.py<br/>train small models from scratch"]
-        gpt["<b>annotated_gpt.py</b><br/>[Python, PyTorch]<br/>the steps 03 to 07 GPT, tagged by paper"]
-        act2["<b>Act 2 demos</b><br/>[Python, transformers]<br/>papers/08 to 11/demo.py<br/>prompt and score open models"]
-        data[("<b>Tiny Shakespeare</b><br/>[Text file]<br/>data/tinyshakespeare.txt")]
-        docs["<b>Reading lists</b><br/>[Markdown]<br/>docs/"]
-        tests["<b>Tests</b><br/>[pytest]<br/>tests/<br/>smoke-run every demo"]
-    end
-    hf["<b>Hugging Face Hub</b><br/>[External system]"]
-    cifar["<b>CIFAR-10 mirror</b><br/>[External system]"]
-    ci["<b>GitHub Actions</b><br/>[External system]"]
-
-    reader -- "reads" --> pages
-    reader -- "runs" --> act1
-    reader -- "runs" --> act2
-    pages -- "explain the output of" --> act1
-    pages -- "explain the output of" --> act2
-    pages -- "link to" --> docs
-    act1 -- "reads" --> data
-    gpt -- "reads" --> data
-    act1 -- "step 00 downloads" --> cifar
-    act2 -- "downloads models from" --> hf
-    tests -- "imports and runs" --> act1
-    tests -- "runs with tiny models" --> act2
-    ci -- "runs" --> tests
-
-    classDef person fill:#08427B,stroke:#052E56,color:#fff
-    classDef container fill:#438DD5,stroke:#2E6295,color:#000
-    classDef external fill:#999999,stroke:#6B6B6B,color:#000
-    class reader person
-    class pages,act1,gpt,act2,data,docs,tests container
-    class hf,cifar,ci external
+```bash
+source .venv/bin/activate
 ```
 
-### Level 3: components of one demo
+```bash
+pip install -r requirements.txt -c constraints.txt
+```
 
-Every `demo.py` has the same shape, whether it trains a network (Act 1) or prompts an open model (Act 2). Each one is a single file you can read on its own, so small helpers such as the device choice, batching and model loading are copied into every demo on purpose rather than shared.
+```bash
+python papers/05-resnet/demo.py
+```
 
-```mermaid
-flowchart LR
-    accTitle: Components of one demo
-    accDescr: The reader runs demo.py. The command line passes the input to a before model or prompt and an after one that adds the paper's idea. Both are scored, and the last line reports RESULT before and after, which the tests check.
-    reader(["<b>Reader</b><br/>[Person]"])
-    subgraph demo ["demo.py, any step"]
-        direction LR
-        cli["<b>Command line</b><br/>[argparse]<br/>--device, --quick, --smoke"]
-        input["<b>Input</b><br/>[Component]<br/>text, images or prompts"]
-        before["<b>Before</b><br/>[Component]<br/>model or prompt without the paper's idea"]
-        after["<b>After</b><br/>[Component]<br/>the same, plus the paper's idea"]
-        score["<b>Score</b><br/>[Component]<br/>loss, accuracy or answer check"]
-        result["<b>Report</b><br/>[Component]<br/>last line: RESULT before=… after=…"]
-    end
-    tests["<b>Tests</b><br/>[pytest]"]
+Each demo picks a GPU when it finds one (Apple `mps` or `cuda`) and falls back to the CPU, except step 01, whose four XOR points always run on the CPU. Pass `--device cpu`, `mps` or `cuda` to choose. On a CPU, add `--quick` for a shorter run (Act 1 only). Steps 01 to 07 work offline, since Tiny Shakespeare is in the repo; step 00 downloads CIFAR-10 on its first run.
 
-    reader -- "python demo.py" --> cli
-    cli --> input
-    input --> before
-    input --> after
-    before --> score
-    after --> score
-    score --> result
-    tests -- "checks the RESULT line" --> result
+Act 2 uses Pythia-1.4B (2.9 GB, steps 08 and 09), Qwen2.5-1.5B-Instruct (3.1 GB, steps 09 to 11) and DeepSeek-R1-Distill-Qwen-1.5B (3.6 GB, step 11). Its measured peak memory is 3.9 to 5.9 GB, so a laptop with 16 GB of RAM should run it.
 
-    classDef person fill:#08427B,stroke:#052E56,color:#fff
-    classDef component fill:#85BBF0,stroke:#5D82A8,color:#000
-    classDef container fill:#438DD5,stroke:#2E6295,color:#000
-    class reader person
-    class cli,input,before,after,score,result component
-    class tests container
+To run the tests and the linter as CI does, install the tools CI uses and run them from the repo root. The tests run every demo in its shortest mode, which took about 30 seconds on the Apple M5 Pro the results were measured on. The Act 2 tests download only the models' tokenizer and config files, not the weights.
+
+```bash
+pip install -r ci-tools.txt
+```
+
+```bash
+python -m pytest -q
+```
+
+```bash
+ruff check . && ruff format --check .
 ```
 
 ## The math behind each step
@@ -437,72 +449,139 @@ class Block(nn.Module):
 
 It trains on Tiny Shakespeare in 54 seconds on an Apple M5 Pro GPU, then writes its own text.
 
-## Run it
+## How the repo is built
 
-You need Python 3.12. Act 1 runs from the repo alone, apart from CIFAR-10 for step 00 (about 170 MB). Act 2 downloads 9.6 GB of models on first use. From a clone of this repo:
+Each step is one folder in `papers/` with a page (`README.md`) and a program (`demo.py`). Every demo ends by printing one line, `RESULT before=… after=…`, and the tests check that line on every commit. The diagrams below follow the [C4 model](https://c4model.com/) at three levels: who uses the repo and what it depends on, what it is made of, and what is inside one demo.
 
-```bash
-python3.12 -m venv .venv
+<details>
+<summary><b>Architecture diagrams (C4 model)</b>, mainly for contributors</summary>
+
+### Level 1: system context
+
+```mermaid
+flowchart TB
+    accTitle: System context of Papers That Built Modern AI
+    accDescr: A reader reads the pages and runs the demos. The repo trains and runs models on PyTorch, downloads models from the Hugging Face Hub and images from a CIFAR-10 mirror, and links each step to the original papers. GitHub Actions tests every commit and builds signed releases from tags.
+    reader(["<b>Reader</b><br/>[Person]<br/>Reads a step, runs its demo"])
+    repo["<b>Papers That Built Modern AI</b><br/>[Software system]<br/>12 steps, 14 papers, 13 runnable demos"]
+    torch["<b>PyTorch</b><br/>[External library]<br/>Tensors, autograd, mps / cuda / cpu"]
+    hf["<b>Hugging Face Hub</b><br/>[External system]<br/>Three open models for Act 2"]
+    cifar["<b>CIFAR-10 mirror</b><br/>[External system]<br/>Images for step 00, via torchvision"]
+    papers["<b>arXiv, NeurIPS, Nature, OpenAI</b><br/>[External systems]<br/>The original paper PDFs"]
+    ci["<b>GitHub Actions</b><br/>[External system]<br/>Lint, tests and CodeQL on every push<br/>Signed releases from tags"]
+
+    reader -- "reads pages, runs demos" --> repo
+    repo -- "trains and runs models on" --> torch
+    repo -- "downloads models from" --> hf
+    repo -- "downloads images from" --> cifar
+    repo -- "links each step to" --> papers
+    ci -- "tests every commit of" --> repo
+
+    classDef person fill:#08427B,stroke:#052E56,color:#fff
+    classDef system fill:#1168BD,stroke:#0B4884,color:#fff
+    classDef external fill:#999999,stroke:#6B6B6B,color:#000
+    class reader person
+    class repo system
+    class torch,hf,cifar,papers,ci external
 ```
 
-```bash
-source .venv/bin/activate
+### Level 2: containers
+
+```mermaid
+flowchart TB
+    accTitle: Containers inside the repo
+    accDescr: The repo holds step pages, Act 1 demos, annotated_gpt.py, Act 2 demos, Tiny Shakespeare, reading lists and tests. The reader reads the pages and runs both acts. Act 1 and annotated_gpt.py read Tiny Shakespeare, step 00 downloads CIFAR-10, and Act 2 downloads models from the Hugging Face Hub. The tests run Act 1 and run Act 2 with tiny models, and GitHub Actions runs the tests.
+    reader(["<b>Reader</b><br/>[Person]"])
+    subgraph repo ["Papers That Built Modern AI"]
+        direction TB
+        pages["<b>Step pages</b><br/>[Markdown]<br/>papers/NN-*/README.md<br/>problem, idea, run it, paper's numbers, what broke next"]
+        act1["<b>Act 1 demos</b><br/>[Python, PyTorch]<br/>papers/00 to 07/demo.py<br/>train small models from scratch"]
+        gpt["<b>annotated_gpt.py</b><br/>[Python, PyTorch]<br/>the steps 03 to 07 GPT, tagged by paper"]
+        act2["<b>Act 2 demos</b><br/>[Python, transformers]<br/>papers/08 to 11/demo.py<br/>prompt and score open models"]
+        data[("<b>Tiny Shakespeare</b><br/>[Text file]<br/>data/tinyshakespeare.txt")]
+        docs["<b>Reading lists</b><br/>[Markdown]<br/>docs/"]
+        tests["<b>Tests</b><br/>[pytest]<br/>tests/<br/>smoke-run every demo"]
+    end
+    hf["<b>Hugging Face Hub</b><br/>[External system]"]
+    cifar["<b>CIFAR-10 mirror</b><br/>[External system]"]
+    ci["<b>GitHub Actions</b><br/>[External system]"]
+
+    reader -- "reads" --> pages
+    reader -- "runs" --> act1
+    reader -- "runs" --> act2
+    pages -- "explain the output of" --> act1
+    pages -- "explain the output of" --> act2
+    pages -- "link to" --> docs
+    act1 -- "reads" --> data
+    gpt -- "reads" --> data
+    act1 -- "step 00 downloads" --> cifar
+    act2 -- "downloads models from" --> hf
+    tests -- "imports and runs" --> act1
+    tests -- "runs with tiny models" --> act2
+    ci -- "runs" --> tests
+
+    classDef person fill:#08427B,stroke:#052E56,color:#fff
+    classDef container fill:#438DD5,stroke:#2E6295,color:#000
+    classDef external fill:#999999,stroke:#6B6B6B,color:#000
+    class reader person
+    class pages,act1,gpt,act2,data,docs,tests container
+    class hf,cifar,ci external
 ```
 
-```bash
-pip install -r requirements.txt -c constraints.txt
+### Level 3: components of one demo
+
+Every `demo.py` has the same shape, whether it trains a network (Act 1) or prompts an open model (Act 2). Each one is a single file you can read on its own, so small helpers such as the device choice, batching and model loading are copied into every demo on purpose rather than shared.
+
+```mermaid
+flowchart LR
+    accTitle: Components of one demo
+    accDescr: The reader runs demo.py. The command line passes the input to a before model or prompt and an after one that adds the paper's idea. Both are scored, and the last line reports RESULT before and after, which the tests check.
+    reader(["<b>Reader</b><br/>[Person]"])
+    subgraph demo ["demo.py, any step"]
+        direction LR
+        cli["<b>Command line</b><br/>[argparse]<br/>--device, --quick, --smoke"]
+        input["<b>Input</b><br/>[Component]<br/>text, images or prompts"]
+        before["<b>Before</b><br/>[Component]<br/>model or prompt without the paper's idea"]
+        after["<b>After</b><br/>[Component]<br/>the same, plus the paper's idea"]
+        score["<b>Score</b><br/>[Component]<br/>loss, accuracy or answer check"]
+        result["<b>Report</b><br/>[Component]<br/>last line: RESULT before=… after=…"]
+    end
+    tests["<b>Tests</b><br/>[pytest]"]
+
+    reader -- "python demo.py" --> cli
+    cli --> input
+    input --> before
+    input --> after
+    before --> score
+    after --> score
+    score --> result
+    tests -- "checks the RESULT line" --> result
+
+    classDef person fill:#08427B,stroke:#052E56,color:#fff
+    classDef component fill:#85BBF0,stroke:#5D82A8,color:#000
+    classDef container fill:#438DD5,stroke:#2E6295,color:#000
+    class reader person
+    class cli,input,before,after,score,result component
+    class tests container
 ```
 
-```bash
-python papers/05-resnet/demo.py
-```
+</details>
 
-Each demo picks a GPU when it finds one (Apple `mps` or `cuda`) and falls back to the CPU, except step 01, whose four XOR points always run on the CPU. Pass `--device cpu`, `mps` or `cuda` to choose. On a CPU, add `--quick` for a shorter run (Act 1 only). Steps 01 to 07 work offline, since Tiny Shakespeare is in the repo; step 00 downloads CIFAR-10 on its first run.
+## Glossary
 
-Act 2 uses Pythia-1.4B (2.9 GB, steps 08 and 09), Qwen2.5-1.5B-Instruct (3.1 GB, steps 09 to 11) and DeepSeek-R1-Distill-Qwen-1.5B (3.6 GB, step 11). Its measured peak memory is 3.9 to 5.9 GB, so a laptop with 16 GB of RAM should run it.
-
-To run the tests and the linter as CI does, install the tools CI uses and run them from the repo root. The tests run every demo in its shortest mode, which took about 30 seconds on the Apple M5 Pro the results were measured on. The Act 2 tests download only the models' tokenizer and config files, not the weights.
-
-```bash
-pip install -r ci-tools.txt
-```
-
-```bash
-python -m pytest -q
-```
-
-```bash
-ruff check . && ruff format --check .
-```
-
-## Results
-
-Measured on an Apple M5 Pro (48 GB), 16 November 2026. Each page shows the full output.
-
-### Act 1: small models trained from scratch
-
-| Step | Before → after | Full run, GPU | `--quick`, CPU |
-|---|---|---|---|
-| [00 AlexNet](papers/00-alexnet/) | Test accuracy 52.2% → 74.4% | 40 s | 76 s |
-| [01 Backprop](papers/01-backprop/) | XOR solved 50% → 100% | 1 s (CPU) | same run |
-| [02 Word2Vec](papers/02-word2vec/) | Pair score -0.016 → 0.258 | 12 s | 3 s |
-| [03 Attention](papers/03-attention/) | Characters right at length 32: 26.0% → 94.2% | 63 s | 17 s |
-| [04 Transformer](papers/04-transformer/) | Loss 1.61 → 1.72, training 29 s → 12 s | 42 s | 13 s |
-| [05 ResNet](papers/05-resnet/) | Loss of a 24-block model 3.36 → 1.67 | 151 s | 106 s |
-| [06 Pre-training](papers/06-pretraining/) | Picks the real line 59.8% → 91.4% | 84 s | 41 s |
-| [07 Scaling](papers/07-scaling/) | Loss 2.21 → 1.66 as size grows | 106 s | 49 s |
-| [annotated_gpt.py](papers/annotated_gpt.py) | Held-out loss 4.195 → 1.794 | 54 s | 35 s |
-
-Step 04's Transformer is slightly worse after the same number of steps but trains more than twice as fast; its page explains why that speed was the paper's argument. GPU runs are not bit-for-bit repeatable, so steps 03, 05 and 06 and annotated_gpt.py can land a little differently each time. The `--quick` CPU runs repeated exactly when re-run.
-
-### Act 2: small open models
-
-| Step | Before → after | Full run, GPU |
-|---|---|---|
-| [08 GPT-3](papers/08-gpt3/) | Items right, no examples → a few examples: 3/16 → 16/16 | 12 s |
-| [09 InstructGPT](papers/09-instructgpt/) | Checks passed, Pythia → Qwen Instruct: 0/3 → 3/3 | 13 s |
-| [10 Chain of Thought](papers/10-chain-of-thought/) | Problems right, answer at once → step by step: 2/12 → 11/12 | 69 s |
-| [11 DeepSeek-R1](papers/11-deepseek-r1/) | Problems right, Qwen step by step → R1-distill: 3/4 → 4/4 | 271 s |
+| Term | What it means here |
+|---|---|
+| Model | A program with a large set of adjustable numbers that turns an input, such as a photo or a sentence, into an output, such as a label or the next word. |
+| Parameters, or weights | The adjustable numbers inside a model. Training sets them. GPT-3 has 175 billion; the models in Act 1 are small enough to train on a laptop in minutes. |
+| Training | Showing a model many examples and nudging its parameters after each batch, so its outputs move closer to the right ones. Step 01 shows how. |
+| Loss | One number for how wrong a model is on average. Training pushes it down, so lower is better. |
+| Accuracy | The share of answers that are right. Higher is better. |
+| GPU | A chip built to do many small calculations at once, which is what training needs. PyTorch calls Apple's GPU `mps` and NVIDIA's `cuda`. |
+| Token | The unit a language model reads and writes: a word, part of a word, or a single character. Steps 03 to 07 work with single characters. |
+| Prompt | The text you give a language model to continue or answer. |
+| Pre-training and fine-tuning | Pre-training teaches a model the language from a large amount of plain text. Fine-tuning then trains it a little more on one task (step 06). |
+| Reinforcement learning | Training by reward instead of by worked answers: the model tries, gets a score, and shifts towards what scored well (steps 09 and 11). |
+| Open model | A model whose weights anyone can download and run on their own machine, like the three in Act 2. |
 
 ## Data and license
 
