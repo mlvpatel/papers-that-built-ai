@@ -8,7 +8,8 @@ Part 1 (Kaplan): train five sizes of the same character-level Transformer on
 Tiny Shakespeare for the same number of steps and compare validation loss.
 Part 2 (Chinchilla): give every size the same compute, counted as parameters
 times characters seen, so small models train longer and big ones shorter, and
-see which size ends up best. Both curves are saved to scaling.png.
+see which size ends up best. Both curves are saved to scaling.png, and to
+scaling-dark.png for pages shown in dark mode.
 
 Run it from the repo root:
     python papers/07-scaling/demo.py            # full run, laptop GPU
@@ -24,11 +25,14 @@ from pathlib import Path
 
 import torch
 import torch.nn.functional as F
+from matplotlib import style
 from matplotlib.figure import Figure
 from torch import nn
 
 DATA = Path(__file__).resolve().parents[2] / "data" / "tinyshakespeare.txt"
-PLOT = Path(__file__).resolve().parent / "scaling.png"
+HERE = Path(__file__).resolve().parent
+# matplotlib style -> file; the page shows the dark one in dark mode
+PLOTS = {"default": HERE / "scaling.png", "dark_background": HERE / "scaling-dark.png"}
 WIDTHS, LAYERS, CONTEXT, BATCH, LR = [32, 64, 96, 128, 192], 4, 64, 64, 1e-3
 STEPS = {"full": 1000, "quick": 250, "smoke": 2}
 BUDGET_WIDTH = 64  # the fixed compute budget is this width's run in part 1
@@ -100,18 +104,24 @@ def val_loss_after(width, steps, splits, vocab, device, eval_batches):
     return sum(losses) / len(losses)
 
 
-def plot(sizes, fixed_steps, fixed_compute, steps, target):
-    fig = Figure(figsize=(10, 4))
-    left, right = fig.subplots(1, 2, sharey=True)
-    for ax, losses, title in [
-        (left, fixed_steps, f"Same steps ({steps} each)"),
-        (right, fixed_compute, "Same compute (parameters x characters)"),
-    ]:
-        ax.plot(sizes, losses, "o-")
-        ax.set(xscale="log", xlabel="parameters (without embeddings)", title=title)
-    left.set_ylabel("validation loss")
-    fig.tight_layout()
-    fig.savefig(target, format="png", dpi=120)
+def plot(sizes, fixed_steps, fixed_compute, steps, targets):
+    for theme, target in targets.items():
+        with style.context(theme):
+            fig = Figure(figsize=(10, 4))
+            left, right = fig.subplots(1, 2, sharey=True)
+            for ax, losses, title in [
+                (left, fixed_steps, f"Same steps ({steps} each)"),
+                (right, fixed_compute, "Same compute (parameters x characters)"),
+            ]:
+                ax.plot(sizes, losses, "o-")
+                ax.set(
+                    xscale="log", xlabel="parameters (without embeddings)", title=title
+                )
+            left.set_ylabel("validation loss")
+            fig.tight_layout()
+            # the dark copy keeps the page background showing through
+            dark = theme != "default"
+            fig.savefig(target, format="png", dpi=120, transparent=dark)
 
 
 def main(argv=None):
@@ -175,7 +185,7 @@ def main(argv=None):
         fixed_steps,
         fixed_compute,
         steps,
-        PLOT if mode == "full" else io.BytesIO(),
+        PLOTS if mode == "full" else {theme: io.BytesIO() for theme in PLOTS},
     )
     print(
         f"RESULT before={fixed_steps[0]:.2f} after={fixed_steps[-1]:.2f} "

@@ -39,9 +39,12 @@ width    params | same steps: steps   loss | same compute: steps   loss
 RESULT before=2.21 after=1.66 seconds=106 device=mps best_size_at_fixed_compute=199936
 ```
 
-![Validation loss against model size: falling with the same steps, a valley with the same compute](scaling.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="scaling-dark.png">
+  <img alt="Validation loss against model size: falling with the same steps, a valley with the same compute" src="scaling.png">
+</picture>
 
-A full run saves its own plot over this `scaling.png`, so `git status` shows it as changed afterwards. `--quick` and `--smoke` runs leave it alone.
+A full run saves its own plots over `scaling.png` and `scaling-dark.png`, the copy shown in dark mode. If its numbers differ from the ones above, `git status` shows the plots as changed. `--quick` and `--smoke` runs leave them alone.
 
 With the same steps, every bigger model is better. With the same compute, the best model is the 64-wide one with about 200,000 parameters, not the biggest: the largest model gets only 112 steps and finishes worst. The small side of the valley is shallow. The 32-wide model is 0.02 behind, which is within the run-to-run noise Kaplan et al. report for their own models (0.05, Figure 22, page 26).
 
