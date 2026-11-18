@@ -8,9 +8,13 @@ the RESULT line), not the results.
 
 import pytest
 import torch
-from test_scoring import cot, gpt3, inst, r1
-from test_smoke import RESULT
+from demo_loader import RESULT, load
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
+
+gpt3 = load("08-gpt3")
+inst = load("09-instructgpt")
+cot = load("10-chain-of-thought")
+r1 = load("11-deepseek-r1")
 
 TINY = {
     "hidden_size": 16,

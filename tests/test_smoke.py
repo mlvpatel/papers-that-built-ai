@@ -4,11 +4,11 @@ Demos are found by folder name, so a new step needs no change here.
 """
 
 import importlib.util
-import re
 from pathlib import Path
 
 import pytest
 import torch
+from demo_loader import RESULT
 
 ROOT = Path(__file__).resolve().parents[1]
 GPU = (
@@ -21,9 +21,6 @@ GPU = (
 DEVICES = ["cpu"] + ([GPU] if GPU else [])  # CI has no GPU; a laptop runs both
 DEMOS = sorted(ROOT.glob("papers/0[0-7]-*/demo.py")) + sorted(
     ROOT.glob("papers/annotated_gpt.py")
-)
-RESULT = re.compile(
-    r"^RESULT before=-?[0-9.]+ after=-?[0-9.]+ seconds=[0-9]+ device=\w+( \w+=\S+)*$"
 )
 
 

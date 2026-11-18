@@ -32,6 +32,12 @@ jobs:
           cache-dependency-path: requirements-ci.txt
       - name: Install the exact CPU wheels, each checked against its hash
         run: pip install --require-hashes -r requirements-ci.txt
+      - name: Cache the Act 2 tokenizers and configs, so tests survive a Hub outage
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/huggingface
+          # the demos hold the pinned model revisions, so a new revision means a new cache
+          key: hf-${{ hashFiles('papers/08-gpt3/demo.py', 'papers/09-instructgpt/demo.py', 'papers/10-chain-of-thought/demo.py', 'papers/11-deepseek-r1/demo.py') }}
       - name: Lint
         run: ruff check . && ruff format --check .
       - name: Smoke-run every demo (Act 2 with tiny models), with coverage

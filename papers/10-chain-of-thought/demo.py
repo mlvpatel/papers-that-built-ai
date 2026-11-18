@@ -17,6 +17,7 @@ The first run downloads the model (about 3.1 GB) into the Hugging Face cache.
 import argparse
 import itertools
 import re
+import sys
 import time
 
 import torch
@@ -164,6 +165,9 @@ def ask(tok, model, question, max_new):  # pragma: no cover - needs the model
 def run(tok, model, suffix, max_new, first, label):  # pragma: no cover - needs model
     right, tokens, t0 = 0, 0, time.time()
     for i, (question, want) in enumerate(PROBLEMS, 1):
+        print(
+            f"  {label}  problem {i} of {len(PROBLEMS)}...", file=sys.stderr, flush=True
+        )
         reply, n = ask(tok, model, question + suffix, max_new)
         got = number(reply, first)
         right += is_right(got, want)

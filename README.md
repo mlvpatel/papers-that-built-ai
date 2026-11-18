@@ -62,6 +62,8 @@ The repo is described at three [C4](https://c4model.com/) levels: who uses it an
 
 ```mermaid
 flowchart TB
+    accTitle: System context of Papers That Built Modern AI
+    accDescr: A reader reads the pages and runs the demos. The repo trains and runs models on PyTorch, downloads models from the Hugging Face Hub and images from a CIFAR-10 mirror, and links each step to the original papers. GitHub Actions tests every commit.
     reader(["<b>Reader</b><br/>[Person]<br/>Reads a step, runs its demo"])
     repo["<b>Papers That Built Modern AI</b><br/>[Software system]<br/>12 steps, 14 papers, 13 runnable demos"]
     torch["<b>PyTorch</b><br/>[External library]<br/>Tensors, autograd, mps / cuda / cpu"]
@@ -89,6 +91,8 @@ flowchart TB
 
 ```mermaid
 flowchart TB
+    accTitle: Containers inside the repo
+    accDescr: The repo holds step pages, Act 1 demos, annotated_gpt.py, Act 2 demos, Tiny Shakespeare, reading lists and tests. The reader reads the pages and runs both acts. Act 1 and annotated_gpt.py read Tiny Shakespeare, step 00 downloads CIFAR-10, and Act 2 downloads models from the Hugging Face Hub. The tests run Act 1 and run Act 2 with tiny models, and GitHub Actions runs the tests.
     reader(["<b>Reader</b><br/>[Person]"])
     subgraph repo ["Papers That Built Modern AI"]
         direction TB
@@ -132,6 +136,8 @@ Every `demo.py` has the same shape, whether it trains a network (Act 1) or promp
 
 ```mermaid
 flowchart LR
+    accTitle: Components of one demo
+    accDescr: The reader runs demo.py. The command line passes the input to a before model or prompt and an after one that adds the paper's idea. Both are scored, and the last line reports RESULT before and after, which the tests check.
     reader(["<b>Reader</b><br/>[Person]"])
     subgraph demo ["demo.py, any step"]
         direction LR
@@ -452,6 +458,20 @@ python papers/05-resnet/demo.py
 Each demo picks a GPU when it finds one (Apple `mps` or `cuda`) and falls back to the CPU, except step 01, whose four XOR points always run on the CPU. Pass `--device cpu`, `mps` or `cuda` to choose. On a CPU, add `--quick` for a shorter run (Act 1 only). Steps 01 to 07 work offline, since Tiny Shakespeare is in the repo; step 00 downloads CIFAR-10 on its first run.
 
 Act 2 uses Pythia-1.4B (2.9 GB, steps 08 and 09), Qwen2.5-1.5B-Instruct (3.1 GB, steps 09 to 11) and DeepSeek-R1-Distill-Qwen-1.5B (3.6 GB, step 11). Its measured peak memory is 3.9 to 5.9 GB, so a laptop with 16 GB of RAM should run it.
+
+To run the tests and the linter as CI does, install the tools CI uses and run them from the repo root. The tests run every demo in its shortest mode, which took about 30 seconds on the Apple M5 Pro the results were measured on. The Act 2 tests download only the models' tokenizer and config files, not the weights.
+
+```bash
+pip install -r ci-tools.txt
+```
+
+```bash
+python -m pytest -q
+```
+
+```bash
+ruff check . && ruff format --check .
+```
 
 ## Results
 
