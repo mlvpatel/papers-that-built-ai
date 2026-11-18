@@ -27,6 +27,8 @@ def stage(c_in, c_out):  # AlexNet's pattern: convolution, ReLU, max pooling
 python papers/00-alexnet/demo.py
 ```
 
+Run time on an Apple M5 Pro: 40 s for a full run on the GPU after the download, 76 s with `--quick` on the CPU.
+
 The first run downloads CIFAR-10 (about 170 MB) into `data/`, which git ignores. Both models learn the 50,000 training photos for 10 epochs, with Adam, a batch of 128 (the paper's batch size, page 6), the same seed and the same batch order. Model A flattens each photo into 3,072 numbers and passes them through two fully connected layers of 512 units. Model B is the small CNN: three convolution stages, then one fully connected layer of 256 units. Accuracy is measured once, after the last epoch, on the 10,000 test photos. Guessing scores 10%.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026, after the download:

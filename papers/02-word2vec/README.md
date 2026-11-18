@@ -23,6 +23,8 @@ neg_loss = F.logsigmoid(-(vout[neg] @ u.unsqueeze(2)).squeeze(2)).sum(1)
 python papers/02-word2vec/demo.py
 ```
 
+Run time on an Apple M5 Pro: 12 s for a full run on the GPU, 3 s with `--quick` on the CPU.
+
 The demo trains 64-dimensional vectors on the dialogue of Tiny Shakespeare. The score is the average similarity of 16 related pairs (king/queen, day/night, father/son and others, fixed before the first run) minus the average similarity of 1,000 random pairs. Zero means the related pairs are no closer than chance.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:

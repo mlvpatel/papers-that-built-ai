@@ -24,6 +24,8 @@ loss.backward()  # backpropagation: the error flows back through every layer
 python papers/01-backprop/demo.py
 ```
 
+Run time on an Apple M5 Pro: about 1 s on the CPU. `--quick` is the same run.
+
 Model A has no hidden layer. Model B has a hidden layer of four units. Both start from the same seed and train for 2,000 steps on the four XOR points. The table shows each model's output for each input; above 0.5 counts as 1.
 
 Measured on an Apple M5 Pro (48 GB), CPU, 16 November 2026:

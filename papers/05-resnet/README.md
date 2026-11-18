@@ -25,6 +25,8 @@ def forward(self, x):
 python papers/05-resnet/demo.py
 ```
 
+Run time on an Apple M5 Pro: 151 s for a full run on the GPU, 106 s with `--quick` on the CPU.
+
 The demo trains the same character-level Transformer on Tiny Shakespeare three times, from the same seed: 2 blocks without skip connections, 24 blocks without them, and 24 blocks with them. Lower validation loss is better; random guessing scores 4.17.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026, 1,000 steps per run:

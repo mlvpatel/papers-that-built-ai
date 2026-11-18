@@ -26,6 +26,8 @@ out = F.scaled_dot_product_attention(q, k, v, is_causal=True)  # all positions a
 python papers/04-transformer/demo.py
 ```
 
+Run time on an Apple M5 Pro: 42 s for a full run on the GPU, 13 s with `--quick` on the CPU.
+
 Two character models of about the same size, trained on Tiny Shakespeare with the same text, seed and 1,500 steps (each model draws its own random batches from it): a GRU (a recurrent network) and a 2-block Transformer. Lower validation loss is better.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:

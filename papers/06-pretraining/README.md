@@ -23,6 +23,8 @@ loss = F.cross_entropy(model(x).flatten(0, 1), y.flatten())
 python papers/06-pretraining/demo.py
 ```
 
+Run time on an Apple M5 Pro: 84 s for a full run on the GPU, 41 s with `--quick` on the CPU.
+
 The test: given a line of Shakespeare and the same words in shuffled order, which one is real? Lines are lowercased with punctuation removed, so word order is the only clue. Each model picks the order it finds more likely, meaning the lower next-character loss. Model A learns from the 300 task lines only. Model B, the same network from the same seed with the same 3,000 steps, learns from the whole text with every test line cut out. Chance is 50%.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:

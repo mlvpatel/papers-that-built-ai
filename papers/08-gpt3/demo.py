@@ -81,10 +81,13 @@ def passes(reply, want):
 def load(device):  # pragma: no cover - downloads a 2.9 GB model, too big for CI
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    tok = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL, revision=REVISION, dtype=torch.bfloat16
-    )
+    try:  # the first run downloads the model
+        tok = AutoTokenizer.from_pretrained(MODEL, revision=REVISION)
+        model = AutoModelForCausalLM.from_pretrained(
+            MODEL, revision=REVISION, dtype=torch.bfloat16
+        )
+    except OSError as err:  # no network, the Hub is down, or the disk is full
+        raise SystemExit(f"Could not load {MODEL}: {err}") from err
     return tok, model.to(device).eval()
 
 
