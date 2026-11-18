@@ -226,7 +226,7 @@ The denominator touches every word in the vocabulary. Negative sampling, which t
 \log\sigma\big({v'_{w_O}}^{\top} v_{w_I}\big) + \sum_{i=1}^{k}\mathbb{E}_{w_i\sim P_n(w)}\Big[\log\sigma\big(-{v'_{w_i}}^{\top} v_{w_I}\big)\Big]
 ```
 
-The logic: words used in the same contexts get pushed towards the same output vectors, so their input vectors end up close. Analogies then become vector arithmetic, answered by the nearest word by cosine distance (page 2):
+The logic: words used in the same contexts get pushed towards the same output vectors, so their input vectors end up close. Analogies then become vector arithmetic, answered by the nearest word by cosine distance (pages 2 and 5):
 
 ```math
 \arg\max_{x}\;\cos\big(v_x,\; v_{\text{king}} - v_{\text{man}} + v_{\text{woman}}\big) = \text{queen}
@@ -307,7 +307,7 @@ Then it fine-tunes on a labeled set $`\mathcal{C}`$, keeping language modelling 
 L_2(\mathcal{C}) = \sum_{(x,y)}\log P\big(y \mid x^1,\ldots,x^m\big), \qquad L_3(\mathcal{C}) = L_2(\mathcal{C}) + \lambda\, L_1(\mathcal{C})
 ```
 
-BERT changes only the pre-training task. It hides a random 15% of the tokens, the set $`M`$, and predicts them from both sides (page 4):
+BERT changes only the pre-training task. It hides a random 15% of the tokens, the set $`M`$, and predicts them from both sides (page 4). The paper gives this loss in words; here it is in modern notation:
 
 ```math
 \mathcal{L}_{\text{MLM}} = -\sum_{i\in M}\log P\big(x_i \mid x_{\setminus M}\big)
@@ -493,7 +493,7 @@ Measured on an Apple M5 Pro (48 GB), 16 November 2026. Each page shows the full 
 | [07 Scaling](papers/07-scaling/) | Loss 2.21 → 1.66 as size grows | 106 s | 49 s |
 | [annotated_gpt.py](papers/annotated_gpt.py) | Held-out loss 4.195 → 1.794 | 54 s | 35 s |
 
-Step 04's Transformer is slightly worse after the same number of steps but trains more than twice as fast; its page explains why that speed was the paper's argument. GPU runs are not bit-for-bit repeatable, so steps 03 and annotated_gpt.py land a little differently each time.
+Step 04's Transformer is slightly worse after the same number of steps but trains more than twice as fast; its page explains why that speed was the paper's argument. GPU runs are not bit-for-bit repeatable, so steps 03, 05 and 06 and annotated_gpt.py can land a little differently each time. The `--quick` CPU runs repeated exactly when re-run.
 
 ### Act 2: small open models
 

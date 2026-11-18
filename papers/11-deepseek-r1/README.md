@@ -20,7 +20,7 @@ python papers/11-deepseek-r1/demo.py
 
 Run time on an Apple M5 Pro: 271 s for a full run on the GPU.
 
-The first run downloads two models of the same size (about 6.7 GB together, each pinned to one revision): Qwen2.5-1.5B-Instruct, told to work step by step as in step 10, and DeepSeek-R1-Distill-Qwen-1.5B, a small model trained on DeepSeek-R1's reasoning. Both get the same four competition-style problems and the same prompt. Qwen uses greedy decoding and up to 1,024 tokens; R1 uses DeepSeek's recommended sampling (temperature 0.6, top-p 0.95, fixed seed) and up to 4,096 tokens. The problems and their answer keys, computed in code, were committed before either model saw them.
+The first run downloads two models of the same size (about 6.7 GB together, each pinned to one revision): Qwen2.5-1.5B-Instruct, told to work step by step as in step 10, and DeepSeek-R1-Distill-Qwen-1.5B, a small model trained on DeepSeek-R1's reasoning. Both get the same four competition-style problems and the same prompt. Qwen uses greedy decoding and up to 1,024 tokens; R1 samples with temperature 0.6, the value DeepSeek's model card recommends, and top-p 0.95, as in DeepSeek's evaluations, with a fixed seed and up to 4,096 tokens. The problems and their answer keys, computed in code, were committed before either model saw them.
 
 Measured on an Apple M5 Pro (48 GB) GPU, 16 November 2026:
 
