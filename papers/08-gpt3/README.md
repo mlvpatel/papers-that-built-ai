@@ -24,7 +24,7 @@ The model is GPT-2's design with some sparse attention layers added (page 8), ma
 python papers/08-gpt3/demo.py
 ```
 
-Run time on an Apple M5 Pro: 12 s for a full run on the GPU.
+Run time on an Apple M5 Pro: 12 s for a full run on the GPU, 48 s on the CPU (`--device cpu`).
 
 The first run downloads Pythia-1.4B (about 2.9 GB, pinned to one revision so results repeat), a base model trained only to predict the next token on 2020-era web text. It does two small tasks: label a review positive or negative, and rewrite a date as YYYY-MM-DD. Each item is asked twice: with only the task description, then with a few solved examples above it. The model, its weights and the items stay the same; only the prompt changes. An answer counts when the first line of the reply starts with it.
 
@@ -62,6 +62,8 @@ RESULT before=3 after=16 seconds=12 device=mps items=16
 ```
 
 With only the description, the model mostly copies the input or keeps talking: 3 of 16. One more reply says "the review is positive", the right idea in the wrong format. With three or four examples above the question, it gets all 16, in the format the examples show.
+
+On the CPU (`--device cpu`, 27 November 2026), the same run scored 4 of 16 with only the description and 16 of 16 with examples. The extra point is the walking-shoes review, which the CPU run answered "positive". Greedy decoding always takes the most likely next token, and the CPU rounds its arithmetic slightly differently from the GPU, so where two tokens are nearly tied the reply can change.
 
 ## The paper's numbers
 

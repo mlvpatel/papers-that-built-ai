@@ -35,3 +35,18 @@ def test_demo_smoke_run_prints_a_result_line(path, device, capsys):
 
     last_line = capsys.readouterr().out.strip().splitlines()[-1]
     assert RESULT.match(last_line), last_line
+
+
+@pytest.mark.parametrize(
+    "error", [OSError("no network"), RuntimeError("File not found or corrupted.")]
+)
+def test_alexnet_turns_a_failed_download_into_one_line(error, monkeypatch):
+    import torchvision.datasets
+
+    def broken(*args, **kwargs):
+        raise error
+
+    monkeypatch.setattr(torchvision.datasets, "CIFAR10", broken)
+
+    with pytest.raises(SystemExit, match="Could not get CIFAR-10"):
+        load("00-alexnet").load(smoke=False)

@@ -23,7 +23,7 @@ The demos download public data and models: CIFAR-10 through torchvision and thre
 
   where `ci-tools.txt` (repo root) pins pytest, pytest-cov, ruff and their test dependencies, and `cpu.txt` pins the `+cpu` builds of torch and torchvision.
 - `main` accepts changes only through pull requests whose CI and CodeQL checks pass. Force pushes and branch deletion are blocked.
-- CodeQL scans the Python code and the workflows on every push, every pull request and once a week.
+- CodeQL scans the Python code and the workflows on every pull request, every push to `main` and once a week.
 - Each release, built by the `release` workflow from a tag on `main`, attaches the source archive and its build provenance, signed through Sigstore. Check an archive with:
 
   ```bash

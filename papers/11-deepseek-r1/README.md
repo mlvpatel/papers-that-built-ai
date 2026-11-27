@@ -18,7 +18,7 @@ The model taught itself to think longer. Its average answer grew steadily throug
 python papers/11-deepseek-r1/demo.py
 ```
 
-Run time on an Apple M5 Pro: 271 s for a full run on the GPU.
+Run time on an Apple M5 Pro: 271 s for a full run on the GPU, 872 s on the CPU (`--device cpu`).
 
 The first run downloads two models of the same size (about 6.7 GB together, each pinned to one revision): Qwen2.5-1.5B-Instruct, told to work step by step as in step 10, and DeepSeek-R1-Distill-Qwen-1.5B, a small model trained on DeepSeek-R1's reasoning. Both get the same four competition-style problems and the same prompt. Qwen uses greedy decoding and up to 1,024 tokens; R1 samples with temperature 0.6, the value DeepSeek's model card recommends, and top-p 0.95, as in DeepSeek's evaluations, with a fixed seed and up to 4,096 tokens. The problems and their answer keys, computed in code, were committed before either model saw them.
 
@@ -51,6 +51,8 @@ RESULT before=3 after=4 seconds=271 device=mps instruct_tokens=2629 r1_tokens=10
 ```
 
 R1 solves all four, Qwen three. The difference is the staircase problem: Qwen's working went wrong and it answered 18 instead of 927. R1 got there, but it used about four times as many tokens overall (10,670 against 2,629) and took four times as long. The excerpt shows why: it stops to ask itself whether 1 counts as a square before moving on. Four problems is a small test, and R1 samples its answers, so another run can land differently; the paper's own numbers below come from full benchmarks, with each score averaged over several samples (page 41).
+
+On the CPU (`--device cpu`, 27 November 2026), the result reversed. Qwen solved all four, the staircase problem included. R1 solved three: on the staircase problem it was still working when it reached its 4,096-token limit. R1 samples its answers, and the same seed draws different random numbers on the CPU than on the GPU. Qwen decodes greedily, but the CPU rounds its arithmetic slightly differently, so its working can change too. One run on four problems cannot rank the two models.
 
 ## The paper's numbers
 

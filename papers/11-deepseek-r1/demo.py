@@ -6,8 +6,9 @@ via Reinforcement Learning" (2025), https://arxiv.org/abs/2501.12948
 Two models of the same size get the same four competition-style problems.
 Qwen2.5-1.5B-Instruct is told to reason step by step (step 10).
 DeepSeek-R1-Distill-Qwen-1.5B was trained on DeepSeek-R1's reasoning and gets
-the same prompt with the sampling settings DeepSeek recommends. The problems
-and their answer keys (computed in code) were committed before the first run.
+the same prompt, sampled at temperature 0.6 (the value DeepSeek recommends) and
+top-p 0.95 (as in DeepSeek's evaluations). The problems and their answer keys
+(computed in code) were committed before the first run.
 
 Run it from the repo root:
     python papers/11-deepseek-r1/demo.py

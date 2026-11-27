@@ -70,9 +70,10 @@ def load(smoke):
 
     try:
         sets = [CIFAR10(DATA, train=t, download=True) for t in (True, False)]
-    except OSError as err:  # no network, or the mirror is down
+    except (OSError, RuntimeError) as err:  # no network, or a damaged download
         raise SystemExit(
-            f"Could not get CIFAR-10 (170 MB, first run only): {err}"
+            f"Could not get CIFAR-10 (170 MB, first run only): {err}. "
+            "Run the demo again to retry the download."
         ) from err
     out = []
     for s in sets:

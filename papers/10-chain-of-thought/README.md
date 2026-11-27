@@ -25,7 +25,7 @@ Writing the steps breaks a problem into parts and leaves a trace you can read wh
 python papers/10-chain-of-thought/demo.py
 ```
 
-Run time on an Apple M5 Pro: 69 s for a full run on the GPU.
+Run time on an Apple M5 Pro: 69 s for a full run on the GPU, 295 s on the CPU (`--device cpu`).
 
 The first run downloads Qwen2.5-1.5B-Instruct (about 3.1 GB, pinned to one revision so results repeat). The same model answers the same 12 word problems twice: first told to give only the final number, then told to reason step by step and put the answer in `\boxed{}`. The answer keys are computed in code, and decoding is greedy, so a rerun on the same machine prints the same text. The problems were written on 15 November 2026 for this test and not changed after.
 
@@ -64,6 +64,8 @@ RESULT before=2 after=11 seconds=69 device=mps direct_tokens=40 step_tokens=4620
 ```
 
 Told to answer at once, the model gets 2 of 12. Told to write the steps, it gets 11 of 12, using about 385 tokens per problem instead of 3. The one miss is problem 8, the sum of numbers up to 200 divisible by 3 or 5: it answered 9,474 instead of 9,368. Before the RESULT line, the demo prints its full step-by-step reply to the last problem, a quadratic solved line by line.
+
+On the CPU (`--device cpu`, 27 November 2026), the same run scored the same 2 of 12 and 11 of 12. It missed problem 8 again, but this time its working ran past the 768-token limit, and the last number in it was 13.
 
 The paper puts worked examples in the prompt; the demo asks in words, which an instruction-trained model (step 09) understands.
 
