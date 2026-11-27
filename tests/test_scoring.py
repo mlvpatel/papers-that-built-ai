@@ -56,9 +56,10 @@ def test_is_right_compares_numbers_with_a_small_tolerance():
     assert not cot.is_right(None, 54)
 
 
-def test_every_problem_has_a_numeric_answer_key():
-    assert len(cot.PROBLEMS) == 12
-    assert all(isinstance(answer, (int, float)) for _, answer in cot.PROBLEMS)
+def test_cot_problem_set_has_its_twelve_keys():
+    # fixed before the first run; the published results depend on them
+    keys = [24, 15, 162, 36, 54, 75, 6, 9368, 24, 9, 72, 46]
+    assert [answer for _, answer in cot.PROBLEMS] == keys
 
 
 gpt3 = load("08-gpt3")

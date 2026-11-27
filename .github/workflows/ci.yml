@@ -38,6 +38,8 @@ jobs:
           path: ~/.cache/huggingface
           # the demos hold the pinned model revisions, so a new revision means a new cache
           key: hf-${{ hashFiles('papers/08-gpt3/demo.py', 'papers/09-instructgpt/demo.py', 'papers/10-chain-of-thought/demo.py', 'papers/11-deepseek-r1/demo.py') }}
+          # an edit to a demo still starts from the last cache instead of an empty one
+          restore-keys: hf-
       - name: Lint
         run: ruff check . && ruff format --check .
       - name: Smoke-run every demo (Act 2 with tiny models), with coverage

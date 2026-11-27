@@ -24,7 +24,7 @@ The reward model works like a reviewer who has learned the team's taste and can 
 python papers/09-instructgpt/demo.py
 ```
 
-Run time on an Apple M5 Pro: 13 s for a full run on the GPU.
+Run time on an Apple M5 Pro: 13 s for a full run on the GPU, 30 s on the CPU (`--device cpu`).
 
 The first run downloads two models (about 6.0 GB together, each pinned to one revision): Pythia-1.4B, trained only to predict the next token, and Qwen2.5-1.5B-Instruct, which was trained to follow instructions. They are two different models from two different labs, trained on different data, so the demo shows the kind of difference instruction training makes, not a controlled measurement of it. No instruction-tuned copy of Pythia's own weights can be downloaded without signing in. The paper's own comparison was controlled: its models share GPT-3's architecture and differ only in the human-feedback training (page 3).
 
@@ -104,6 +104,8 @@ RESULT before=0 after=3 seconds=13 device=mps checks=3
 ```
 
 Pythia treats each instruction as the start of a forum page: it answers as "A:", then repeats one sentence until it runs out of tokens, and asked for three tips it lists twelve. Qwen Instruct does what was asked all three times. The haiku check counts lines, not syllables, and Qwen's three lines have 4, 7 and 4 syllables instead of 5, 7 and 5.
+
+On the CPU (`--device cpu`, 27 November 2026), Qwen Instruct again passed all 3 checks and Pythia passed 1. Pythia's haiku reply was "A:", one sentence, and a second sentence repeated along a single line. That is three lines, so the check passes it, though it is no haiku: the check counts lines and nothing else. Greedy decoding always takes the most likely next token, and the CPU rounds its arithmetic slightly differently from the GPU, so where two tokens are nearly tied the reply can change.
 
 ## The paper's numbers
 

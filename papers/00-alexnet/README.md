@@ -4,6 +4,8 @@ Paper: [ImageNet Classification with Deep Convolutional Neural Networks](https:/
 
 ## What was broken
 
+Computers were bad at saying what is in a photo: even the best systems missed the right answer in their top five guesses more than one time in four.
+
 Before AlexNet, the best ImageNet systems averaged several classifiers: six sparse-coding models in the 2010 competition, and later two classifiers trained on Fisher vectors, the "SIFT + FVs" entry (Table 1 and text, page 7). They missed the right class in their top five guesses 28.2% and 25.7% of the time.
 
 A neural network can learn its own features, but a plain one treats a photo as a flat list of numbers. Every unit in its first layer needs its own weight for every pixel, and nothing tells it that an edge in one corner is the same thing as an edge in another. Convolutional networks fix that, yet the authors write that they had been "prohibitively expensive" to apply at large scale to high-resolution images (page 2).
